@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title></title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <style>
+        *{
+            text-align: center;
+
+        }
+
+   section{
+     margin-top:100px;
+
+   }
+
+   .container{
+
+     display: grid;
+     width:800px;
+     background-color: #e9e9e9;
+
+     height: 500px;
+     grid-template-columns: 1fr;
+     grid-template-rows: auto 40px 40px auto 40px 40px;
+   }
+   .useriddiv{
+
+     grid-row: 1/2;
+   }
+   .passworddiv{
+
+     grid-row: 2/3;
+   }
+   .password2div{
+
+     grid-row: 3/4;
+   }
+   .usernicknamediv{
+
+     grid-row: 4/5;
+   }
+   .useremaildiv{
+
+     grid-row: 5/6;
+   }
+   .buttondiv{
+
+     grid-row: 6/7;
+    }
+   </style>
+
+  </head>
+  <body>
+    <script>
+/*
+    function checkid(){
+     var userid = document.getElementById("userid").value;
+     if(userid)
+      {
+      url = "idcheck.php?userid="+userid;
+     window.open(url,"chkid","width=300,height=100");
+     }else{
+     alert("아이디를 입력하세요");
+     }
+    }
+*/
+
+
+
+    </script>
+<script src="//code.jquery.com/jquery.min.js"></script>
+    <section >
+    <div class="container">
+
+
+              <h1 style="font-style:Italic;margin-bottom:-150px; padding-top:50px;">회원가입</h1>
+              <form name="signup_form" method="post" action="./signup_check.php" >
+
+                <script type="text/javascript">
+                var id_check=0;
+                function check_id(){
+                        var uid =$('input#userid').val();
+                        if(!uid){
+                            alert("아이디를 입력해주십시오");
+                        }
+                        else{
+                        var udata={"uid":uid};
+                        $.ajax({
+                          url: "idcheck.php",
+                          type: "post",
+                          data: udata,
+                        }).done(function(data) {
+
+                            if(data==1){
+                              id_check=1;
+                              alert("사용 가능한 아이디입니다.");
+
+                            }else{
+                              id_check=0;
+                              alert("중복된 아이디입니다.");
+
+                            }
+
+                        });
+                      }
+                                  }
+                </script>
+
+                   <div class="useriddiv">
+                     <input type="text" id="userid" class="userid" name="userid" placeholder="ID를 입력해주세요 (최대 20자)" style="width:345px;" required value="">
+                     <script type="text/javascript">
+                     $('#userid').on('keyup', function() {
+
+                       if($(this).val().length >20 ) {
+
+                         alert("글자수는 20자 이내로 제한됩니다.");
+
+                         $(this).val($(this).val().substring(0, 20));
+
+                       }
+                      id_check=0;
+                     });
+                     </script>
+
+
+                     <input type="button"  name="" style="display:block;margin-left:42%;margin-bottom:20px;"  value="아이디 중복확인" onclick="check_id();">
+
+                   </div>
+
+                   <div class="passworddiv">
+                     <input type="password" id="password1" class="password1" name="password1" style="width:345px;" value="" placeholder="PW를 입력해주세요(최대 12자)"  required>
+                   <script type="text/javascript">
+                   $('#password1').on('keyup', function() {
+
+                     if($(this).val().length >12 ) {
+
+                       alert("글자수는 12자 이내로 제한됩니다.");
+
+                       $(this).val($(this).val().substring(0, 12));
+
+                     }
+
+                   });
+                   </script>
+                    </div>
+                    <div class="password2div">
+                      <input type="password" id="password2" class="password2" name="password2" style="margin-bottom:15px;width:345px;" value="" placeholder="PW를 다시 입력해주세요"  required>
+                       <script type="text/javascript">
+                        $('#password2').on('keyup', function() {
+
+                          if($(this).val().length >12 ) {
+
+                            alert("글자수는 12자 이내로 제한됩니다.");
+
+                            $(this).val($(this).val().substring(0, 12));
+
+                          }
+
+                        });
+                        </script>
+                    </div>
+                  <div class="usernicknamediv">
+                    <input type="text" id="usernickname" class="usernickname" name="usernickname" style="width:345px;" value="" placeholder="닉네임을 입력해주세요 (최대 8자)"  required>
+                    <script type="text/javascript">
+                    $('#usernickname').on('keyup', function() {
+
+                      if($(this).val().length >8 ) {
+
+                        alert("글자수는 8자 이내로 제한됩니다.");
+
+                        $(this).val($(this).val().substring(0, 8));
+
+                      }
+                                nickname_check=0;
+                    });
+                    </script>
+                          <input type="button" name="" style="display:block;margin-left:42%;margin-bottom:20px;" value="닉네임 중복확인" onclick="check_nickname();">
+                          <script type="text/javascript">
+                          var nickname_check=0;
+                          function check_nickname(){
+                              var nickname =$('input#usernickname').val();
+
+                                if(!nickname) {
+                                 alert("닉네임을 입력해주십시오");
+                                }
+                                else{
+                                var udata={"usernickname":nickname};
+                                $.ajax({
+                                  url: "nicknamecheck.php",
+                                  type: "post",
+                                  data: udata,
+                                }).done(function(data) {
+
+                                    if(data==1){
+                                      nickname_check=1;
+                                      alert("사용 가능한 닉네임입니다.");
+
+                                    }else{
+                                      nickname_check=0;
+                                      alert("중복된 닉네임입니다.");
+
+
+                                    }
+
+                                });
+                              }
+                            }
+                          </script>
+
+
+                  </div>
+                  <div class="emaildiv">
+
+                  </div>
+                  <div class="buttondiv">
+                    <input type="button"  value="회원 가입" class="btn btn-primary" onclick="signupcheck();"><br>
+                    <script type="text/javascript">
+                      function signupcheck(){
+                        var pw1 = $('#password1').val();
+                        var pw2 = $('#password2').val();
+
+                        if(id_check==1&&nickname_check==1){
+                          if(!pw1 || !pw2){
+                             alert("빈칸을 입력해주세요");
+                          }else{
+                              document.signup_form.submit();
+                          }
+                        }else{
+                          alert("중복 체크를 해주십시오");
+                        }
+                      }
+                    </script>
+                  </div>
+
+
+
+
+
+              </form>
+</div>
+      </section>
+
+
+
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>

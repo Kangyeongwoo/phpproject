@@ -1,0 +1,86 @@
+<?php
+include_once ('./dbconfig.php');
+$mysqli = new mysqli($DB['host'], $DB['id'], $DB['pw'], $DB['db']);
+?>
+
+
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Bootstrap 4</title>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <style media="screen">
+    .list-table {
+margin-top: 40px;
+}
+.list-table thead th{
+height:40px;
+border-top:2px solid #09C;
+border-bottom:1px solid #CCC;
+font-weight: bold;
+font-size: 17px;
+}
+.list-table tbody td{
+text-align:center;
+padding:10px 0;
+border-bottom:1px solid #CCC; height:20px;
+font-size: 14px
+}
+    </style>
+
+  </head>
+  <body>
+
+  <h1>자유게시판</h1>
+    <h4>자유롭게 글을 쓸 수 있는 게시판입니다.</h4>
+      <table class="list-table">
+        <thead>
+            <tr>
+                <th width="70">번호</th>
+                  <th width="70">분류</th>
+                  <th width="500">제목</th>
+                  <th width="120">글쓴이</th>
+                  <th width="100">작성일</th>
+                  <th width="100">조회수</th>
+              </tr>
+          </thead>
+          <?php
+            $q = "SELECT * FROM postdata order by idpostdata desc limit 0,5";
+            $result = $mysqli->query( $q);
+            while($board = $result->fetch_array())
+              {
+                $title=$board["title"];
+                if(strlen($title)>30)
+                {
+                  $title=str_replace($board["title"],mb_substr($board["title"],0,30,"utf-8")."...",$board["title"]); //title이 30을 넘어서면 ...표시
+                }
+          ?>
+        <tbody>
+          <tr>
+            <td width="70"><?php echo $board['idpostdata']; ?></td>
+            <td width="70"><?php echo $board['category']; ?></td>
+            <td width="500"><a href=""><?php echo $title;?></a></td>
+            <td width="120"><?php echo $board['author']?></td>
+            <td width="100"><?php echo $board['date']?></td>
+            <td width="100"><?php echo $board['count']; ?></td>
+          </tr>
+        </tbody>
+        <?php } ?>
+      </table>
+      <div id="write_btn">
+        <a href="noticeregister.html"><button>글쓰기</button></a>
+      </div>
+    </div>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>

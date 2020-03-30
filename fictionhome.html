@@ -1,0 +1,1978 @@
+<?php
+session_start();
+$_SESSION['userid'];
+$_SESSION['usernickname'];
+include_once ('./dbconfig.php');
+$dfuserid=$_SESSION['userid'];
+$mysqli = new mysqli($DB['host'], $DB['id'], $DB['pw'], $DB['db']);
+?>
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <title></title>
+    <style media="screen">
+      *{
+        font-family: Sans-Serif;
+      }
+      header{
+          /*  border : 2px solid red; */
+          line-height: 55px;
+          height : 55px;
+          font-size : 30px;
+          font-style : Italic;
+          text-align: center;
+      }
+      nav{
+        /*  border : 2px solid blue; */
+          height : 50px;
+          font-size : 30px;
+          margin-bottom: 20px;
+          text-align: center;
+      }
+      .headfunc{
+        display:block;
+
+      }
+      .navul{
+             text-align:center;
+           display:inline-block;
+       }
+       .navli{
+           display:inline-block;
+           font-size: 15px;
+           width: 150px;
+       }
+       #usercategorycontainer{
+         margin-top: 10px;
+       }
+       #usercategorycontainer ul{
+         list-style: none;
+         margin: 0px;
+         padding: 0px;
+       }
+       #usercategorycontainer ul li{
+         background-color: white;
+         width:150px;
+         height: 25px;
+         line-height: 25px;
+         text-align: center;
+         border: 1px solid gray;
+         color: black;
+         font-size: 15px;
+         margin: 0px;
+         padding: 0px;
+       }
+       #usercategorycontainer ul li:hover{
+         background-color: #85C1E9;
+         margin: 0px;
+         padding: 0px;
+       }
+       #usercategorycontainer ul ul{
+         display: none;
+         margin: 0px;
+         padding: 0px;
+       }
+       #usercategorycontainer ul li:hover > ul{
+         display: block;
+         margin: 0px;
+         padding: 0px;
+       }
+       .btcustom1{
+         color:gray;
+       }
+       .btcustom2{
+         font-weight:bold;
+       }
+
+      section{
+            width: auto;
+            height : auto;
+            background-color:#D8D8D8;
+            text-align:center;
+            min-height: 550px;
+      }
+      .fictionintro_container{
+        margin-top:10px;
+        margin-bottom:10px;
+        background-color:white;
+        width:800px;
+        height: auto;
+        display:inline-block;
+      }
+      .fictionintro_grid{
+        display: grid;
+        grid-template-columns: 1fr 3fr;
+        grid-template-rows: 25px 25px 25px 40px auto;
+      }
+      .fictionhome_image{
+
+        grid-row: 1/5;
+        grid-column: 1/2;
+      }
+      .fictionhome_title{
+        margin-left:20px;
+        grid-row: 1/2;
+        grid-column: 2/3;
+      }
+      .fictionhome_author{
+margin-left:20px;
+        grid-row: 2/3;
+        grid-column: 2/3;
+      }
+      .fictionhome_data{
+margin-left:20px;
+        grid-row: 3/4;
+        grid-column: 2/3;
+        font-size:12px;
+      }
+      .fictionhome_button{
+        margin-right:10px;
+        grid-row: 4/5;
+        grid-column: 2/3;
+      }
+      .fictionhome_detaildescription{
+        border-top: 2px solid gray;
+        grid-row: 5/6;
+        grid-column: 1/3;
+
+      }
+      .fictiontable_container{
+        display:inline-block;
+        background-color:white;
+        width:800px;
+
+        height:auto;
+        margin-bottom:-6px;
+
+      }
+      .writecontainer{
+        display:inline-block;
+        width:800px;
+        background-color:white;
+        margin-bottom:10px;
+
+      }
+  .list-fictiontable thead th{
+  height:40px;
+  border-top:2px solid #09C;
+  border-bottom:1px solid #CCC;
+  font-weight: bold;
+  font-size: 17px;
+  }
+  .list-fictiontable tbody td{
+  text-align:center;
+  padding:10px 0;
+  border-bottom:1px solid #CCC; height:20px;
+  font-size: 14px
+  }
+  .chapterbtncustom{
+    width:400px;
+  }
+  .authorbutton{
+    background-color:white;
+    width:800px;
+    display:inline-block;
+  }
+  .fictionread_container{
+    display:inline-block;
+    width:800px;
+    background-color:white;
+  }
+  .comment_containerout{
+    display: inline-block;
+    width:800px;
+    background-color: white;
+    margin-top:10px;
+  }
+  .comment_container{
+    display: inline-block;
+    width:700px;
+    background-color: white;
+  }
+  .commentgrid{
+    display: grid;
+    padding-top: 5px;
+    grid-template-columns: 1fr 4fr;
+    grid-template-rows: 40px auto 40px;
+    border-bottom: 1px solid gray;
+  }
+  .comment_nickname{
+     grid-column: 1/2 ;
+     grid-row: 1/2;
+     font-size: 15px;
+     font-weight: bold;
+     border-right: 1px dotted gray;
+  }
+  .comment_date{
+    grid-column: 1/2;
+    grid-row: 2/3;
+    font-size: 12px;
+    color:gray;
+    border-right: 1px dotted gray;
+  }
+  .comment_description{
+    grid-column: 2/3;
+    grid-row: 1/3;
+
+  }
+  .comment_bt{
+    grid-column: 2/3;
+    grid-row: 3/4;
+  }
+  .commentwrite_container{
+    display: inline-block;
+    width:800px;
+    background-color: white;
+    text-align: center;
+    padding-top: 50px;
+  }
+  .fictionread_bt{
+    background-color:white;
+    width:800px;
+    display:inline-block;
+  }
+  #page{
+    margin-top:5px;
+  }
+  #subpage{
+    margin-top:5px;
+  }
+    </style>
+  </head>
+  <body>
+    <script src="//code.jquery.com/jquery.min.js"></script>
+
+      <?php
+
+       if(empty($_SESSION['userid'])){
+
+       }else{
+         $q10="SELECT * FROM userprofill WHERE id='$dfuserid'";
+         $result10=$mysqli->query($q10);
+         $usercoin=$result10->fetch_array();
+       }
+
+      ?>
+      <header>
+
+        <span class="headfunc" >
+
+
+
+            <?php
+
+            if(!isset($_SESSION['userid']) || !isset($_SESSION['usernickname'])){
+              ?>
+              <i style="text-align:center;margin-left:320px;">BookChain</i>
+            <div class="homelogin-charge" style="float:right;margin-right:5px;">
+              <input type="button" class="btn btn-primary" value="로그인" onClick="location.href='login.html'">
+            </div>
+            <?php
+          }else{
+            $dfusernickname=$_SESSION['usernickname'];
+            ?>
+            <i style="text-align:center;margin-left:500px;">BookChain</i>
+           <div id="usercategorycontainer" style="z-index:2;float:right;margin-right:5px;">
+
+          <ul >
+            <li ><?php echo $dfusernickname; ?><img style="float:right;padding-right:2px;padding-top:3px;" src="./siteimage/down.png" alt="">
+              <ul>
+              <li><a href="userpage.html?usercategoryid=1">내정보</a></li>
+              <li><a href="userpage.html?usercategoryid=2">선호작</a></li>
+              <li><a href="userpage.html?usercategoryid=3">충전하기</a></li>
+              <li><a href="userpage.html?usercategoryid=4&myfictioncategoryid=1">내작품</a></li>
+              <li><a href="userpage.html?usercategoryid=5">내게시글</a></li>
+              <li><a href="userpage.html?usercategoryid=6&mybuylistcategoryid=1">구매목록</a></li>
+              <li><a href="logout.html">로그아웃</a></li>
+            </ul>
+          </li>
+          </ul>
+           </div>
+
+           <div class="" style="font-size:12px;float:right;margin-right:10px;font-weight:bold;cursor:pointer;" onclick="coincharge();">
+              내 캐시: <?php echo $usercoin['coin']; ?> 원
+           </div>
+           <script type="text/javascript">
+             function coincharge(){
+                  location.href="userpage.html?usercategoryid=3"
+             }
+           </script>
+
+          <?php
+          }
+          ?>
+
+            <div class="" style="float:right;">
+              <form class="" id="searchfrm" name="searchfrm" action="searchpage.php" method="GET">
+                <input type="text" style="border:1px solid black;width:150px;height:30px;font-size:20px;" placeholder="작품검색" name="searchtext" value=""><img src="./siteimage/search.png" onclick="search()" style="margin-top:7px;margin-right:30px; height:30px;width:auto;cursor:pointer;border:1px solid black;" alt="">
+              </form>
+            </div>
+            <script type="text/javascript">
+              function search(){
+                  $('#searchfrm').submit();
+              }
+            </script>
+
+        </span>
+
+
+      </header>
+    <nav>
+      <?php
+      $dfcategoryid = $_GET["categoryid"];
+      ?>
+        <ul class="navul">
+          <li class="navli"><form class="" action="./main.html" method="get">
+            <?php
+            if(empty($dfcategoryid)){
+            ?>
+            <input type="submit" class="btn btn-default btcustom1" name="" value="홈" style="width:100px;">
+            <?php
+             }else{
+            ?>
+            <input type="submit" class="btn btn-default btcustom2" name="" value="홈" style="width:100px;">
+            <?php
+            }
+            ?>
+
+            </form></li>
+          <li class="navli"><form class="" action="./main.html" method="get">
+            <?php
+            if($dfcategoryid==="1"){
+            ?>
+            <input type="hidden" name="categoryid" value="1">
+            <input type="submit" class="btn btn-default btcustom2" name="" value="무료웹소설" style="width:100px;">
+            <?php
+             }else{
+            ?>
+            <input type="hidden" name="categoryid" value="1">
+            <input type="submit" class="btn btn-default btcustom1" name="" value="무료웹소설" style="width:100px;">
+            <?php
+            }
+            ?></form>
+            </li>
+
+          <li class="navli"><form class="" action="./main.html" method="get">
+            <?php
+            if($dfcategoryid==="2"){
+            ?>
+            <input type="hidden" name="categoryid" value="2">
+            <input type="submit" class="btn btn-default btcustom2" name="" value="유료웹소설" style="width:100px;">
+            <?php
+             }else{
+
+            ?>
+            <input type="hidden" name="categoryid" value="2">
+            <input type="submit" class="btn btn-default btcustom1" name="" value="유료웹소설" style="width:100px;">
+            <?php
+            }
+            ?></form>
+            </li>
+
+            <li class="navli"><form class="" action="./main.html" method="get">
+              <?php
+              if($dfcategoryid==="3"){
+
+              ?>
+              <input type="hidden" name="categoryid" value="3">
+              <input type="submit" class="btn btn-default btcustom2" name="" value="추천게시판" style="width:100px;">
+              <?php
+               }else{
+
+              ?>
+              <input type="hidden" name="categoryid" value="3">
+              <input type="submit" class="btn btn-default btcustom1" name="" value="추천게시판" style="width:100px;">
+              <?php
+              }
+              ?>
+              </form>
+            </li>
+            <?php
+            if(empty( $dfusernickname )===false){
+            ?>
+            <li class="navli" style="border-left:1px solid gray"><form class="" action="./userpage.html" method="get">
+              <input type="hidden" name="usercategoryid" value="2">
+              <input type="submit" class="btn btn-default btcustom1" name="" value="선호작" style="width:100px;">
+              </form></li>
+            <li class="navli"><form class="" action="./userpage.html" method="get">
+              <input type="hidden" name="usercategoryid" value="4">
+              <input type="hidden" name="myfictioncategoryid" value="1">
+              <input type="submit" class="btn btn-default btcustom1" name="" value="내 작품" style="width:100px;">
+              </form></li>
+            <?php
+            }
+            ?>
+        </ul>
+    </nav>
+    <script src="//code.jquery.com/jquery.min.js"></script>
+
+    <section>
+      <!--  소설 정보 콘테이너 안에 그리드 ; 이미지, 작가, 조회수, 추천수, 연재수, 추천버튼, 첫화보기버튼 -->
+      <?php
+      $dfwriteid=$_GET['writeid'];
+      $dfchapter=$_GET['chapter'];
+      $dfnotice=$_GET['notice'];
+      $dffictionid = $_GET['fictionid'];
+      $page = $_GET['page'];
+      if(empty($page)){
+        $page=1;
+      }
+
+      $q = "SELECT * FROM fictiondata WHERE idfictiondata='$dffictionid'";
+      $result = $mysqli->query( $q);
+      $myfictionlist =$result->fetch_array();
+        $myfictionlist["idfictiondata"];
+        if(empty($myfictionlist["idfictiondata"])){
+          echo '<script>alert("잘못된 접근입니다.");document.location.href="./main.html";</script>';
+        }
+        $myfictionlist["fiction_imagepath"];
+        $myfictionlist["fiction_title"];
+        $myfictionlist["fiction_pricecategory"];
+        $myfictionlist["fiction_descriptiondetail"];
+        $myfictionlist["fiction_count"];
+        $myfictionlist["fiction_genre"];
+        $myfictionlist["fiction_author"];
+
+        $q4="SELECT buy_chapterid FROM buydata WHERE buy_userid='$dfuserid'";
+        $result4=$mysqli->query($q4);
+        $buy_chapterlist = array();
+        while($mybuylist=$result4->fetch_array()){
+          array_push($buy_chapterlist, $mybuylist['buy_chapterid']);
+        }
+       if(empty($dfchapter)==false&&empty($dffictionid)==false){
+        $q5 = "SELECT * FROM chapterdata WHERE chapter_fictionid='$dffictionid' AND chapter_number='$dfchapter'";
+        $result5 = $mysqli->query($q5);
+        $exception=$result5->fetch_array();
+
+        if($exception['chapter_category']=="유료"){
+          if(in_array($exception['idchapterdata'],$buy_chapterlist)){
+
+          }else{
+            ?>
+            <script>alert("먼저 작품을 구매해야 합니다.");
+            document.location.href="./fictionhome.html?fictionid=<?php echo $dffictionid; ?>";
+            </script>
+            <?php
+          }
+        }else{
+
+        }
+      }
+
+      if(empty($dfwriteid)&&empty($dfchapter)&&empty($dfnotice)){
+      ?>
+      <!--책 소개 부분-->
+
+      <div class="fictionintro_container">
+        <div class="fictionintro_grid">
+          <div class="fictionhome_image">
+              <img src="<?php echo $myfictionlist["fiction_imagepath"]; ?>" alt="" draggable="false" style="width: 100%; height: 100%;">
+          </div>
+          <div class="fictionhome_title">
+              <p style="float:left;"><?php echo $myfictionlist["fiction_title"]; ?></p>
+          </div>
+          <div class="fictionhome_author">
+              <p style="float:left;"><?php echo $myfictionlist["fiction_author"]; ?></p>
+          </div>
+          <div class="fictionhome_data">
+             <p style="float:left;">연재수:</p> <p style="float:left;"> <?php echo $myfictionlist["fiction_totalchapter"]; ?></p>
+             <p style="float:left;">&nbsp;조회수:</p><p style="float:left;"><?php echo $myfictionlist["fiction_count"]; ?></p>
+             <p style="float:left;">&nbsp;추천수:</p><p style="float:left;"> <?php echo $myfictionlist["fiction_favorite"]; ?></p>
+          </div>
+          <div class="fictionhome_button">
+             <input type="button" class="btn btn-outline-dark"  name="" value="첫화보기" style="float:right;" onclick="readcount_start();">
+             <?php
+             $q9 = "SELECT * FROM chapterdata WHERE chapter_fictionid='$dffictionid' AND chapter_number=1";
+             $result9 = $mysqli->query( $q9);
+             $chapterprice=$result9->fetch_array();
+
+             if(empty($chapterprice)){
+
+             }else{
+               if($chapterprice["chapter_category"]=="무료"){ ?>
+
+                 <script type="text/javascript">
+                    function readcount_start(){
+                            var boardname = "fiction";
+                            var chapterdata_re = 1;
+                            var fictiondata_re ="<?php echo $myfictionlist["idfictiondata"]; ?>";
+                            var udata={"boardname":boardname , "chapterdata_re":chapterdata_re , "fictiondata_re":fictiondata_re };
+                            $.ajax({
+                              url: "boardcount_check.php",
+                              type: "post",
+                              data: udata,
+                            }).done(function(data) {
+
+                             location.href="./fictionhome.html?fictionid=<?php echo $dffictionid; ?>&chapter=1";
+
+                            });
+                        }
+                  </script>
+
+               <?php }elseif($chapterprice["chapter_category"]=="유료"){ ?>
+
+                 <script type="text/javascript">
+                 function readcount_start(){
+                         var boardname = "fiction";
+                         var chapterdata_re =1;
+                         var fictiondata_re ="<?php echo $myfictionlist["idfictiondata"]; ?>";
+                         var dfuserid = "<?php echo $dfuserid; ?>";
+                         var idchapterdata="<?php echo $chapterprice['idchapterdata']; ?>"
+                         var udata={"boardname":boardname , "chapterdata_re":chapterdata_re , "fictiondata_re":fictiondata_re, "dfuserid":dfuserid, "idchapterdata":idchapterdata };
+                         $.ajax({
+                           url: "buylist_check.php",
+                           type: "post",
+                           data: udata,
+                         }).done(function(data) {
+                          if(data=="no"){
+                            alert("먼저 작품을 구매해야 합니다.");
+                          }else{
+                           location.href="./fictionhome.html?fictionid=<?php echo $dffictionid; ?>&chapter=1";
+                          }
+                         });
+                     }
+                 </script>
+
+            <?php   }
+             }
+             ?>
+
+
+
+             <?php if(empty($_SESSION["userid"])){ ?>
+            <button type="button" id="favoritebutton" class="btn btn-outline-dark" style="float:right;margin-right:10px;" name="button" onclick="favorite_not();"><img src="./siteimage/star.png" style="margin-right:10px;" alt=""><?php echo $myfictionlist["fiction_favorite"];?> 명</button>
+               <script type="text/javascript">
+                 function favorite_not(){
+                   alert("먼저 로그인을 해주세요");
+                 }
+               </script>
+             <?php }else{
+               $q8="SELECT * FROM favoritefictiondata WHERE favoritefiction_userid='$dfuserid' AND favoritefiction_fictionid='$dffictionid'";
+               $fav=$mysqli->query($q8);
+               $favorite=$fav->fetch_array();
+               if(empty($favorite)){ ?>
+                 <button type="button" id="favoritebutton" class="btn btn-outline-dark" style="float:right;margin-right:10px;" name="button" onclick="check_favorite();"><img style="margin-right:10px;" id="star" src="./siteimage/star.png" alt=""><span id="starval"><?php echo $myfictionlist["fiction_favorite"];?> 명</span></button>
+              <?php   }else{ ?>
+                 <button type="button" id="favoritebutton" class="btn btn-outline-dark" style="float:right;margin-right:10px;" name="button" onclick="check_favorite();"><img style="margin-right:10px;" id="star" src="./siteimage/star2.png" alt=""><span id="starval"><?php echo $myfictionlist["fiction_favorite"];?> 명</span></button>
+
+              <?php  }
+
+               ?>
+               <script type="text/javascript">
+                  function check_favorite(){
+                          var uid ="<?php echo $_SESSION['userid']; ?>";
+                          var favoritefictiondata ="<?php echo $myfictionlist["idfictiondata"]; ?>";
+                          var udata={"uid":uid , "favoritefictiondata":favoritefictiondata };
+                          $.ajax({
+                            url: "favoritefiction_check.php",
+                            type: "post",
+                            data: udata,
+                          }).done(function(data) {
+
+                              var datasplit = data.split(',');
+
+                               if(datasplit[0]=="no"){
+                                 $('#star').attr("src","./siteimage/star.png");
+                                 $('#starval').text(datasplit[1]+" 명");
+                               }else{
+                                 $('#star').attr("src","./siteimage/star2.png");
+                                  $('#starval').text(datasplit[1]+" 명");
+                               }
+
+
+                          });
+                      }
+                </script>
+             <?php } ?>
+
+          </div>
+
+          <div class="fictionhome_detaildescription" style="height:auto;">
+           <pre style="white-space:pre-line;padding-top:10px;"><?php echo $myfictionlist["fiction_descriptiondetail"]; ?></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="authorbutton">
+
+      <?php if($myfictionlist["fiction_pricecategory"]=="유료"){ ?>
+        <form class="" name="buyfrm" action="buy_check.php" method="POST">
+          <input type="hidden" name="buylist" id="buylist" value="">
+          <input type="hidden" name="fictionid" value="<?php echo $dffictionid; ?>">
+          <input style="float:left;margin:3px" type="button" class="btn btn-outline-dark" name="" value="구매하기" onclick="buysubmit();">
+        </form>
+        <script type="text/javascript">
+          function buysubmit(){
+                var dfuserid2 = "<?php echo $dfuserid; ?>";
+                if(!dfuserid2){alert("먼저 로그인을 해주세요");}else{
+          var send_array = Array();
+          var send_cnt = 0;
+          var chkbox = $(".buyCheckbox");
+
+          for(i=0;i<chkbox.length;i++) {
+           if (chkbox[i].checked == true){
+            send_array[send_cnt] = chkbox[i].value;
+           send_cnt++;
+           }
+           }
+           if(send_array.length==0){
+             alert("구매할 항목을 선택해 주세요");
+           }else{
+           $("#buylist").val(send_array);
+           document.buyfrm.submit();
+           }
+}
+          }
+        </script>
+      <?php } ?>
+
+      <?php
+      if($myfictionlist["fiction_author"]===$_SESSION['usernickname']){
+      ?>
+      <form class="" action="./userpage.html" method="get">
+          <input type="hidden" name="usercategoryid" value="4">
+            <input type="hidden" name="myfictioncategoryid" value="2">
+        <input type="hidden" name="fictionid" value="<?php echo $myfictionlist["idfictiondata"]; ?>">
+        <input style="float:right;margin:3px;" type="submit" class="btn btn-outline-dark" name="" value="작품 설정">
+      </form>
+          <!--글쓰기버튼-->
+          <form class="" action="fictionhome.html" method="get">
+            <input type="hidden" name="fictionid" value="<?php echo $myfictionlist["idfictiondata"]; ?>">
+            <input type="hidden" name="writeid" value="1">
+            <input style="float:right;margin:3px" type="submit" class="btn btn-outline-dark" name="" value="글쓰기">
+          </form>
+
+          <!--공지쓰기버튼-->
+          <form class="" action="fictionhome.html" method="get">
+            <input type="hidden" name="fictionid" value="<?php echo $myfictionlist["idfictiondata"]; ?>">
+            <input type="hidden" name="writeid" value="2">
+            <input style="float:right;margin:3px" type="submit" class="btn btn-outline-dark" name="" value="공지쓰기">
+          </form>
+
+       <?php
+      }
+      ?>
+       </div>
+       <!-- 무료화 부분 공지사항 -->
+
+       <?php
+       if($myfictionlist["fiction_pricecategory"]=="무료"){
+         ?>
+        <div class="fictiontable_container" >
+          <table class="list-fictiontable" >
+            <thead>
+                <tr>
+                      <th width="70">번호</th>
+                      <th width="500">제목</th>
+                      <th width="100">작성일</th>
+                      <th width="100">조회수</th>
+                </tr>
+
+            </thead>
+              <?php
+
+              $q3 = "SELECT * FROM chapternoticedata WHERE chapternotice_fictionid='$dffictionid' order by chapternotice_number desc";
+              $result3 = $mysqli->query( $q3);
+                while($board =$result3->fetch_array()){
+                   $dateorigin=$board['chapternotice_date'];
+                   $date=explode(' ',$dateorigin);
+                   date_default_timezone_set('Asia/Seoul');
+                   $curdate = date("Y-m-d");
+
+                    $title=$board["chapternotice_title"];
+                    if(strlen($title)>30)
+                    {
+                      $title=str_replace($board["chapternotice_title"],mb_substr($board["chapternotice_title"],0,30,"utf-8")."...",$board["chapternotice_title"]); //title이 30을 넘어서면 ...표시
+                    }
+              ?>
+
+             <tbody >
+
+              <tr >
+                <td width="70">공지</td>
+                <?php if($curdate==$date[0]){ ?>
+                  <td width="500"><a style="cursor:pointer;" onclick="readcount2_<?php echo $board['chapternotice_number']; ?>_<?php echo $myfictionlist["idfictiondata"]; ?>();" ><img src="./siteimage/newimage.png" alt=""> <?php echo $title;?> +<?php echo $board['chapternotice_commentcount']; ?></a></td>
+                  <script type="text/javascript">
+                     function readcount2_<?php echo $board['chapternotice_number']; ?>_<?php echo $myfictionlist["idfictiondata"]; ?>(){
+                             var boardname = "notice";
+                             var chapternoticedata_re ="<?php echo $board['chapternotice_number']; ?>";
+                             var fictiondata_re ="<?php echo $myfictionlist["idfictiondata"]; ?>";
+                             var udata={"boardname":boardname , "chapternoticedata_re":chapternoticedata_re , "fictiondata_re":fictiondata_re };
+                             $.ajax({
+                               url: "boardnoticecount_check.php",
+                               type: "post",
+                               data: udata,
+                             }).done(function(data) {
+
+                              location.href="./fictionhome.html?fictionid=<?php echo $myfictionlist["idfictiondata"]?>&notice=<?php echo $board['chapternotice_number']; ?>"
+
+                             });
+                         }
+                   </script>
+                <td width="100"><?php echo $date[1] ?></td>
+                <?php }else{?>
+                  <td width="500"><a style="cursor:pointer;" onclick="readcount2_<?php echo $board['chapternotice_number']; ?>_<?php echo $myfictionlist["idfictiondata"]; ?>();" > <?php echo $title;?> +<?php echo $board['chapternotice_commentcount']; ?></a></td>
+                  <script type="text/javascript">
+                     function readcount2_<?php echo $board['chapternotice_number']; ?>_<?php echo $myfictionlist["idfictiondata"]; ?>(){
+                             var boardname = "notice";
+                             var chapternoticedata_re ="<?php echo $board['chapternotice_number']; ?>";
+                             var fictiondata_re ="<?php echo $myfictionlist["idfictiondata"]; ?>";
+                             var udata={"boardname":boardname , "chapternoticedata_re":chapternoticedata_re , "fictiondata_re":fictiondata_re };
+                             $.ajax({
+                               url: "boardnoticecount_check.php",
+                               type: "post",
+                               data: udata,
+                             }).done(function(data) {
+
+                              location.href="./fictionhome.html?fictionid=<?php echo $myfictionlist["idfictiondata"]?>&notice=<?php echo $board['chapternotice_number']; ?>"
+
+                             });
+                         }
+                   </script>
+
+                <td width="100"><?php echo $date[0] ?></td>
+                <?php } ?>
+                <td width="100"><?php echo $board['chapternotice_count']; ?></td>
+              </tr>
+            </tbody>
+
+            <?php } ?>
+          </table>
+
+        </div>
+        <!-- 무료화 부분 챕터 -->
+        <div class="fictiontable_container" >
+          <table class="list-fictiontable">
+              <?php
+
+              $q6 = "SELECT COUNT(*) as cnt FROM chapterdata WHERE chapter_fictionid='$dffictionid' order by chapter_number desc";
+              $result6 = $mysqli->query($q6);
+              $row=mysqli_fetch_assoc($result6);
+
+              $allpost = $row['cnt']; //전체 게시글의 수
+
+              $onepage=10; // 한 페이지에 보여줄 게시글의 수.
+
+              $total_page = ceil($allpost / $onepage); //전체 페이지의 수
+
+              if(is_numeric($page)==false||$page<0||$page>$total_page&&$total_page!=0){
+                ?>
+                <script type="text/javascript">
+                  alert("잘못된 접근입니다.");
+                  location.href="./fictionhome.html?fictionid=<?php echo $myfictionlist["idfictiondata"]?>";
+                </script>
+                <?php
+              }
+
+              $limit_start=($onepage*($page-1));
+
+              $block_num=10;
+
+              $block=ceil($page/$block_num);
+              $block_start=(($block -1)*$block_num)+1;
+              $block_end=$block_start+$block_num-1;
+
+              if($block_end > $total_page){
+                $block_end=$total_page;
+              }
+              $total_block=ceil($total_page/$block_num);
+
+                $q7="SELECT * FROM readchapterdata WHERE userid='$dfuserid' AND readfictionid='$dffictionid'";
+                $readsub = $mysqli->query($q7);
+                $read= $readsub->fetch_array();
+
+                $q2 = "SELECT * FROM chapterdata WHERE chapter_fictionid='$dffictionid' order by idchapterdata desc limit $limit_start,$onepage";
+                $result2 = $mysqli->query( $q2);
+                while($board =$result2->fetch_array()){
+
+                   $dateorigin=$board['chapter_date'];
+                   $date=explode(' ',$dateorigin);
+                   date_default_timezone_set('Asia/Seoul');
+                   $curdate = date("Y-m-d");
+
+
+                    $title=$board["chapter_title"];
+                    if(strlen($title)>30)
+                    {
+                      $title=str_replace($board["chapter_title"],mb_substr($board["chapter_title"],0,30,"utf-8")."...",$board["chapter_title"]); //title이 30을 넘어서면 ...표시
+                    }
+              ?>
+
+             <tbody>
+
+              <tr >
+                <td width="70"><?php echo $board['chapter_number']; ?></td>
+                  <?php if($curdate==$date[0]){ ?>
+                  <td width="500"><a style="cursor:pointer" class="title_<?php echo $board['idchapterdata']; ?>" onclick="readcount_<?php echo $board['chapter_number']; ?>_<?php echo $myfictionlist["idfictiondata"]; ?>();" ><img src="./siteimage/newimage.png" alt=""> <?php echo $title;?> +<?php echo $board['chapter_commentcount']; ?></a></td>
+                  <script type="text/javascript">
+                     function readcount_<?php echo $board['chapter_number']; ?>_<?php echo $myfictionlist["idfictiondata"]; ?>(){
+                             var boardname = "fiction";
+                             var chapterdata_re ="<?php echo $board['chapter_number']; ?>";
+                             var fictiondata_re ="<?php echo $myfictionlist["idfictiondata"]; ?>";
+                             var udata={"boardname":boardname , "chapterdata_re":chapterdata_re , "fictiondata_re":fictiondata_re };
+                             $.ajax({
+                               url: "boardcount_check.php",
+                               type: "post",
+                               data: udata,
+                             }).done(function(data) {
+
+                              location.href="./fictionhome.html?fictionid=<?php echo $myfictionlist["idfictiondata"]?>&chapter=<?php echo $board['chapter_number']; ?>&page=<?php echo $page; ?>"
+
+                             });
+                         }
+                   </script>
+                   <?php
+                   if(empty($read)==false){
+                     if($board['chapter_number']<=$read['readchapternumber']){ ?>
+                      <script type="text/javascript">
+                        $('.title_<?php echo $board['idchapterdata']; ?>').css("color","#bdbebd");
+                      </script>
+                    <?php }
+                   }
+                   ?>
+
+                <td width="100"><?php echo $date[1] ?></td>
+                <?php }else{?>
+                  <td width="500"><a style="cursor:pointer" class="title_<?php echo $board['idchapterdata']; ?>" onclick="readcount_<?php echo $board['chapter_number']; ?>_<?php echo $myfictionlist["idfictiondata"]; ?>();" > <?php echo $title;?> +<?php echo $board['chapter_commentcount']; ?></a></td>
+                  <script type="text/javascript">
+                     function readcount_<?php echo $board['chapter_number']; ?>_<?php echo $myfictionlist["idfictiondata"]; ?>(){
+                             var boardname = "fiction";
+                             var chapterdata_re ="<?php echo $board['chapter_number']; ?>";
+                             var fictiondata_re ="<?php echo $myfictionlist["idfictiondata"]; ?>";
+                             var udata={"boardname":boardname , "chapterdata_re":chapterdata_re , "fictiondata_re":fictiondata_re };
+                             $.ajax({
+                               url: "boardcount_check.php",
+                               type: "post",
+                               data: udata,
+                             }).done(function(data) {
+
+                              location.href="./fictionhome.html?fictionid=<?php echo $myfictionlist["idfictiondata"]?>&chapter=<?php echo $board['chapter_number']; ?>&page=<?php echo $page; ?>"
+
+                             });
+                         }
+                   </script>
+                   <?php
+                   if(empty($read)==false){
+                     if($board['chapter_number']<=$read['readchapternumber']){ ?>
+                      <script type="text/javascript">
+                        $('.title_<?php echo $board['idchapterdata']; ?>').css("color","#bdbebd");
+                      </script>
+                    <?php }
+                   }
+                   ?>
+                <td width="100"><?php echo $date[0] ?></td>
+                <?php } ?>
+
+                <td width="100"><?php echo $board['chapter_count']; ?></td>
+              </tr>
+            </tbody>
+
+            <?php } ?>
+          </table>
+          <?php if(!empty($allpost)){ ?>
+          <div class="" id="page">
+           <!-- 처음 버튼 -->
+            <?php
+               if($page<=1){
+            ?>
+                 <span>처음</span>
+            <?php
+               }else{
+            ?>
+                 <a href="./fictionhome.html?fictionid=<?php echo $dffictionid; ?>&page=1">처음</a>
+
+            <?php } ?>
+
+            <!-- 이전 버튼 -->
+            <?php
+               if($block<=1){
+                echo "";
+            ?>
+            <?php
+               }else{
+                 $prev_block = $block_start-1;
+            ?>
+                 <a href="./fictionhome.html?fictionid=<?php echo $dffictionid; ?>&page=<?php echo $prev_block; ?>">이전</a>
+
+            <?php } ?>
+
+            <!-- 숫자 버튼 -->
+            <?php
+               for($i=$block_start; $i<=$block_end; $i++){
+                 if($page==$i){
+            ?>
+                    <span>[<?php echo $i; ?>]</span>
+            <?php
+                 }else{
+            ?>
+                   <a href="./fictionhome.html?fictionid=<?php echo $dffictionid; ?>&page=<?php echo $i; ?>">[<?php echo $i; ?>]</a>
+            <?php
+                 }
+               }
+            ?>
+           <!-- 다음 버튼 -->
+            <?php if($block >= $total_block){
+              echo "";
+            }else{
+              $next_block=$block_end +1;
+               ?>
+               <a href="./fictionhome.html?fictionid=<?php echo $dffictionid; ?>&page=<?php echo $next_block; ?>">다음</a>
+             <?php } ?>
+            <!-- 마지막 버튼 -->
+            <?php if($page>=$total_page){ ?>
+              <span>마지막</span>
+           <?php }else{ ?>
+              <a href="./fictionhome.html?fictionid=<?php echo $dffictionid; ?>&page=<?php echo $total_page; ?>">마지막</a>
+           <?php } ?>
+          </div>
+        <?php }else{ ?>
+          <p style=" padding-top:50px; background-color:#D8D8D8;text-align:center;height:150px;margin-bottom: -0px;font-size:30px;"> 등록된 글이 없습니다.</p>
+
+        <?php  } ?>
+        </div>
+
+         <!--무료화부분 끝-->
+      <?php
+    }elseif($myfictionlist["fiction_pricecategory"]=="유료"){
+      ?>
+      <!-- 유료화 부분 시작-->
+
+      <div class="fictiontable_container" >
+        <table class="list-fictiontable" >
+          <thead>
+              <tr>
+                    <th width="70">결제</th>
+                    <th width="70">번호</th>
+                    <th width="460">제목</th>
+                    <th width="100">작성일</th>
+                    <th width="100">조회수</th>
+              </tr>
+
+          </thead>
+          <?php
+
+          $q3 = "SELECT * FROM chapternoticedata WHERE chapternotice_fictionid='$dffictionid' order by chapternotice_number desc";
+          $result3 = $mysqli->query( $q3);
+            while($board =$result3->fetch_array()){
+               $dateorigin=$board['chapternotice_date'];
+               $date=explode(' ',$dateorigin);
+               date_default_timezone_set('Asia/Seoul');
+               $curdate = date("Y-m-d");
+
+                $title=$board["chapternotice_title"];
+                if(strlen($title)>30)
+                {
+                  $title=str_replace($board["chapternotice_title"],mb_substr($board["chapternotice_title"],0,30,"utf-8")."...",$board["chapternotice_title"]); //title이 30을 넘어서면 ...표시
+                }
+          ?>
+
+         <tbody >
+
+          <tr >
+            <td width="70"></td>
+            <td width="70">공지</td>
+            <?php if($curdate==$date[0]){ ?>
+              <td width="460"><a style="cursor:pointer;" onclick="readcount2_<?php echo $board['chapternotice_number']; ?>_<?php echo $myfictionlist["idfictiondata"]; ?>();" ><img src="./siteimage/newimage.png" alt=""> <?php echo $title;?> +<?php echo $board['chapternotice_commentcount']; ?></a></td>
+              <script type="text/javascript">
+                 function readcount2_<?php echo $board['chapternotice_number']; ?>_<?php echo $myfictionlist["idfictiondata"]; ?>(){
+                         var boardname = "notice";
+                         var chapternoticedata_re ="<?php echo $board['chapternotice_number']; ?>";
+                         var fictiondata_re ="<?php echo $myfictionlist["idfictiondata"]; ?>";
+                         var udata={"boardname":boardname , "chapternoticedata_re":chapternoticedata_re , "fictiondata_re":fictiondata_re };
+                         $.ajax({
+                           url: "boardnoticecount_check.php",
+                           type: "post",
+                           data: udata,
+                         }).done(function(data) {
+
+                          location.href="./fictionhome.html?fictionid=<?php echo $myfictionlist["idfictiondata"]?>&notice=<?php echo $board['chapternotice_number']; ?>"
+
+                         });
+                     }
+               </script>
+            <td width="100"><?php echo $date[1] ?></td>
+            <?php }else{?>
+              <td width="460"><a style="cursor:pointer;" onclick="readcount2_<?php echo $board['chapternotice_number']; ?>_<?php echo $myfictionlist["idfictiondata"]; ?>();" > <?php echo $title;?> +<?php echo $board['chapternotice_commentcount']; ?></a></td>
+              <script type="text/javascript">
+                 function readcount2_<?php echo $board['chapternotice_number']; ?>_<?php echo $myfictionlist["idfictiondata"]; ?>(){
+                         var boardname = "notice";
+                         var chapternoticedata_re ="<?php echo $board['chapternotice_number']; ?>";
+                         var fictiondata_re ="<?php echo $myfictionlist["idfictiondata"]; ?>";
+                         var udata={"boardname":boardname , "chapternoticedata_re":chapternoticedata_re , "fictiondata_re":fictiondata_re };
+                         $.ajax({
+                           url: "boardnoticecount_check.php",
+                           type: "post",
+                           data: udata,
+                         }).done(function(data) {
+
+                          location.href="./fictionhome.html?fictionid=<?php echo $myfictionlist["idfictiondata"]?>&notice=<?php echo $board['chapternotice_number']; ?>"
+
+                         });
+                     }
+               </script>
+            <td width="100"><?php echo $date[0] ?></td>
+            <?php } ?>
+            <td width="100"><?php echo $board['chapternotice_count']; ?></td>
+          </tr>
+        </tbody>
+
+        <?php } ?>
+        </table>
+
+      </div>
+      <!-- 유료화 부분 챕터 -->
+      <div class="fictiontable_container" >
+        <table class="list-fictiontable">
+
+            <?php
+            $q6 = "SELECT COUNT(*) as cnt FROM chapterdata WHERE chapter_fictionid='$dffictionid' order by chapter_number desc ";
+            $result6 = $mysqli->query($q6);
+            $row=mysqli_fetch_assoc($result6);
+
+            $allpost = $row['cnt']; //전체 게시글의 수
+
+            $onepage=10; // 한 페이지에 보여줄 게시글의 수.
+
+            $total_page = ceil($allpost / $onepage); //전체 페이지의 수
+
+            if(is_numeric($page)==false||$page<0||$page>$total_page&&$total_page!=0){
+              ?>
+              <script type="text/javascript">
+               alert("<?php echo $page ?>");
+                location.href="./main.html";
+              </script>
+              <?php
+            }
+
+            $limit_start=($onepage*($page-1));
+
+            $block_num=10;
+
+            $block=ceil($page/$block_num);
+            $block_start=(($block -1)*$block_num)+1;
+            $block_end=$block_start+$block_num-1;
+
+            if($block_end > $total_page){
+              $block_end=$total_page;
+            }
+            $total_block=ceil($total_page/$block_num);
+
+            $q7="SELECT * FROM readchapterdata WHERE userid='$dfuserid' AND readfictionid='$dffictionid'";
+            $readsub = $mysqli->query($q7);
+            $read= $readsub->fetch_array();
+
+              $q2 = "SELECT * FROM chapterdata WHERE chapter_fictionid='$dffictionid' order by idchapterdata desc limit $limit_start,$onepage";
+              $result2 = $mysqli->query( $q2);
+              while($board =$result2->fetch_array()){
+                $dateorigin=$board['chapter_date'];
+                $date=explode(' ',$dateorigin);
+                date_default_timezone_set('Asia/Seoul');
+                $curdate = date("Y-m-d");
+
+                  $title=$board["chapter_title"];
+                  if(strlen($title)>30)
+                  {
+                    $title=str_replace($board["chapter_title"],mb_substr($board["chapter_title"],0,30,"utf-8")."...",$board["chapter_title"]); //title이 30을 넘어서면 ...표시
+                  }
+            ?>
+
+           <tbody>
+
+            <tr >
+              <?php if($board["chapter_category"]=="무료") {?>
+              <th width="70"><input type="checkbox" disabled style="border-bottom:1px solid #CCC;" name="" value=""></th>
+              <?php }elseif($board["chapter_category"]=="유료"){
+
+                if(in_array($board['idchapterdata'],$buy_chapterlist)){?>
+                  <th width="70"><input type="checkbox" disabled style="border-bottom:1px solid #CCC;"  value="<?php echo $board['idchapterdata']; ?>"></th>
+
+                <?php }else{?>
+                  <th width="70"><input type="checkbox" class="buyCheckbox" style="border-bottom:1px solid #CCC;" name="buyid[]" value="<?php echo $board['idchapterdata']; ?>"></th>
+
+                <?php } ?>
+
+              <?php } ?>
+
+              <td width="70"><?php echo $board['chapter_number']; ?></td>
+
+
+              <?php if($curdate==$date[0]){ ?>
+               <?php if($board["chapter_category"]=="무료") {?>
+                 <td width="460"><a style="cursor:pointer;" class="title_<?php echo $board['idchapterdata']; ?>" onclick="readcount_<?php echo $board['chapter_number']; ?>_<?php echo $myfictionlist["idfictiondata"]; ?>();"><pre style="float:left;">[Free]</pre><img src="./siteimage/newimage.png" alt=""> <?php echo $title;?> +<?php echo $board['chapter_commentcount']; ?></a></td>
+                 <script type="text/javascript">
+                    function readcount_<?php echo $board['chapter_number']; ?>_<?php echo $myfictionlist["idfictiondata"]; ?>(){
+                            var boardname = "fiction";
+                            var chapterdata_re ="<?php echo $board['chapter_number']; ?>";
+                            var fictiondata_re ="<?php echo $myfictionlist["idfictiondata"]; ?>";
+                            var udata={"boardname":boardname , "chapterdata_re":chapterdata_re , "fictiondata_re":fictiondata_re };
+                            $.ajax({
+                              url: "boardcount_check.php",
+                              type: "post",
+                              data: udata,
+                            }).done(function(data) {
+
+                             location.href="./fictionhome.html?fictionid=<?php echo $myfictionlist["idfictiondata"]?>&chapter=<?php echo $board['chapter_number']; ?>&page=<?php echo $page; ?>"
+
+                            });
+                        }
+                  </script>
+                  <?php
+                  if(empty($read)==false){
+                    if($board['chapter_number']<=$read['readchapternumber']){ ?>
+                     <script type="text/javascript">
+                       $('.title_<?php echo $board['idchapterdata']; ?>').css("color","#bdbebd");
+                     </script>
+                   <?php }
+                  }
+                  ?>
+               <?php }elseif($board["chapter_category"]=="유료"){
+                 if(in_array($board['idchapterdata'],$buy_chapterlist)){?>
+                   <td width="460"><a style="cursor:pointer;" class="title_<?php echo $board['idchapterdata']; ?>" onclick="readcount_<?php echo $board['chapter_number']; ?>_<?php echo $myfictionlist["idfictiondata"]; ?>();"><pre style="float:left;">[구매완료]</pre><img src="./siteimage/newimage.png" alt=""> <?php echo $title;?> +<?php echo $board['chapter_commentcount']; ?></a></td>
+
+                 <?php }else{?>
+                 <td width="460"><a style="cursor:pointer;"  class="title_<?php echo $board['idchapterdata']; ?>" onclick="readcount_<?php echo $board['chapter_number']; ?>_<?php echo $myfictionlist["idfictiondata"]; ?>();"><pre style="float:left;">[100원]</pre><img src="./siteimage/newimage.png" alt=""> <?php echo $title;?> +<?php echo $board['chapter_commentcount']; ?></a></td>
+                 <?php }?>
+
+                 <script type="text/javascript">
+                 function readcount_<?php echo $board['chapter_number']; ?>_<?php echo $myfictionlist["idfictiondata"]; ?>(){
+                         var boardname = "fiction";
+                         var chapterdata_re ="<?php echo $board['chapter_number']; ?>";
+                         var fictiondata_re ="<?php echo $myfictionlist["idfictiondata"]; ?>";
+                         var dfuserid = "<?php echo $dfuserid; ?>";
+                         var idchapterdata="<?php echo $board['idchapterdata']; ?>"
+                         var udata={"boardname":boardname , "chapterdata_re":chapterdata_re , "fictiondata_re":fictiondata_re, "dfuserid":dfuserid, "idchapterdata":idchapterdata };
+                         $.ajax({
+                           url: "buylist_check.php",
+                           type: "post",
+                           data: udata,
+                         }).done(function(data) {
+                          if(data=="no"){
+                            alert("먼저 작품을 구매해야 합니다.");
+                          }else{
+                           location.href="./fictionhome.html?fictionid=<?php echo $myfictionlist["idfictiondata"]?>&chapter=<?php echo $board['chapter_number']; ?>&page=<?php echo $page; ?>"
+                          }
+                         });
+                     }
+                 </script>
+                 <?php
+                 if(empty($read)==false){
+                   if($board['chapter_number']<=$read['readchapternumber']){ ?>
+                    <script type="text/javascript">
+                      $('.title_<?php echo $board['idchapterdata']; ?>').css("color","#bdbebd");
+                    </script>
+                  <?php }
+                 }
+                 ?>
+               <?php } ?>
+              <td width="100"><?php echo $date[1] ?></td>
+
+              <?php }else{?>
+                <?php if($board["chapter_category"]=="무료") {?>
+                  <td width="460"><a style="cursor:pointer;" class="title_<?php echo $board['idchapterdata']; ?>" onclick="readcount_<?php echo $board['chapter_number']; ?>_<?php echo $myfictionlist["idfictiondata"]; ?>();"><pre style="float:left;">[Free]</pre> <?php echo $title;?> +<?php echo $board['chapter_commentcount']; ?></a></td>
+                  <script type="text/javascript">
+                     function readcount_<?php echo $board['chapter_number']; ?>_<?php echo $myfictionlist["idfictiondata"]; ?>(){
+                             var boardname = "fiction";
+                             var chapterdata_re ="<?php echo $board['chapter_number']; ?>";
+                             var fictiondata_re ="<?php echo $myfictionlist["idfictiondata"]; ?>";
+                             var udata={"boardname":boardname , "chapterdata_re":chapterdata_re , "fictiondata_re":fictiondata_re };
+                             $.ajax({
+                               url: "boardcount_check.php",
+                               type: "post",
+                               data: udata,
+                             }).done(function(data) {
+
+                              location.href="./fictionhome.html?fictionid=<?php echo $myfictionlist["idfictiondata"]?>&chapter=<?php echo $board['chapter_number']; ?>&page=<?php echo $page; ?>"
+
+                             });
+                         }
+                   </script>
+                   <?php
+                   if(empty($read)==false){
+                     if($board['chapter_number']<=$read['readchapternumber']){ ?>
+                      <script type="text/javascript">
+                        $('.title_<?php echo $board['idchapterdata']; ?>').css("color","#bdbebd");
+                      </script>
+                    <?php }
+                   }
+                   ?>
+                <?php }elseif($board["chapter_category"]=="유료"){
+
+                  if(in_array($board['idchapterdata'],$buy_chapterlist)){?>
+                    <td width="460"><a style="cursor:pointer;" class="title_<?php echo $board['idchapterdata']; ?>" onclick="readcount_<?php echo $board['chapter_number']; ?>_<?php echo $myfictionlist["idfictiondata"]; ?>();"><pre style="float:left;">[구매완료]</pre> <?php echo $title;?> +<?php echo $board['chapter_commentcount']; ?></a></td>
+
+                  <?php }else{?>
+
+                    <td width="460"><a style="cursor:pointer;" class="title_<?php echo $board['idchapterdata']; ?>" onclick="readcount_<?php echo $board['chapter_number']; ?>_<?php echo $myfictionlist["idfictiondata"]; ?>();"><pre style="float:left;">[100원]</pre> <?php echo $title;?> +<?php echo $board['chapter_commentcount']; ?></a></td>
+                  <?php } ?>
+
+
+                  <script type="text/javascript">
+                  function readcount_<?php echo $board['chapter_number']; ?>_<?php echo $myfictionlist["idfictiondata"]; ?>(){
+                          var boardname = "fiction";
+                          var chapterdata_re ="<?php echo $board['chapter_number']; ?>";
+                          var fictiondata_re ="<?php echo $myfictionlist["idfictiondata"]; ?>";
+                          var dfuserid = "<?php echo $dfuserid; ?>";
+                          var idchapterdata="<?php echo $board['idchapterdata']; ?>"
+                          var udata={"boardname":boardname , "chapterdata_re":chapterdata_re , "fictiondata_re":fictiondata_re, "dfuserid":dfuserid, "idchapterdata":idchapterdata };
+                          $.ajax({
+                            url: "buylist_check.php",
+                            type: "post",
+                            data: udata,
+                          }).done(function(data) {
+                           if(data=="no"){
+                             alert("먼저 작품을 구매해야 합니다.");
+                           }else{
+                            location.href="./fictionhome.html?fictionid=<?php echo $myfictionlist["idfictiondata"]?>&chapter=<?php echo $board['chapter_number']; ?>&page=<?php echo $page; ?>"
+                           }
+                          });
+                      }
+                  </script>
+                  <?php
+                  if(empty($read)==false){
+                    if($board['chapter_number']<=$read['readchapternumber']){ ?>
+                     <script type="text/javascript">
+                       $('.title_<?php echo $board['idchapterdata']; ?>').css("color","#bdbebd");
+                     </script>
+                   <?php }
+                  }
+                  ?>
+                <?php } ?>
+              <td width="100"><?php echo $date[0] ?></td>
+              <?php } ?>
+
+
+              <td width="100"><?php echo $board['chapter_count']; ?></td>
+            </tr>
+          </tbody>
+
+          <?php } ?>
+        </table>
+        <?php if(!empty($allpost)){ ?>
+        <div class="" id="page">
+         <!-- 처음 버튼 -->
+          <?php
+             if($page<=1){
+          ?>
+               <span>처음</span>
+          <?php
+             }else{
+          ?>
+               <a href="./fictionhome.html?fictionid=<?php echo $dffictionid; ?>&page=1">처음</a>
+
+          <?php } ?>
+
+          <!-- 이전 버튼 -->
+          <?php
+             if($block<=1){
+              echo "";
+          ?>
+          <?php
+             }else{
+               $prev_block = $block_start-1;
+          ?>
+               <a href="./fictionhome.html?fictionid=<?php echo $dffictionid; ?>&page=<?php echo $prev_block; ?>">이전</a>
+
+          <?php } ?>
+
+          <!-- 숫자 버튼 -->
+          <?php
+             for($i=$block_start; $i<=$block_end; $i++){
+               if($page==$i){
+          ?>
+                  <span>[<?php echo $i; ?>]</span>
+          <?php
+               }else{
+          ?>
+                 <a href="./fictionhome.html?fictionid=<?php echo $dffictionid; ?>&page=<?php echo $i; ?>">[<?php echo $i; ?>]</a>
+          <?php
+               }
+             }
+          ?>
+         <!-- 다음 버튼 -->
+          <?php if($block >= $total_block){
+            echo "";
+          }else{
+            $next_block=$block_end +1;
+             ?>
+             <a href="./fictionhome.html?fictionid=<?php echo $dffictionid; ?>&page=<?php echo $next_block; ?>">다음</a>
+           <?php } ?>
+          <!-- 마지막 버튼 -->
+          <?php if($page>=$total_page){ ?>
+            <span>마지막</span>
+         <?php }else{ ?>
+            <a href="./fictionhome.html?fictionid=<?php echo $dffictionid; ?>&page=<?php echo $total_page; ?>">마지막</a>
+         <?php } ?>
+        </div>
+      <?php }else{ ?>
+
+        <p style=" padding-top:50px; background-color:#D8D8D8;text-align:center;height:150px;margin-bottom: -0px;font-size:30px;"> 등록된 글이 없습니다.</p>
+
+
+    <?php  } ?>
+
+      </div>
+      <?php
+    }
+      ?>
+      </div>
+
+      <!--글쓰기 할때-->
+      <?php
+    }elseif(empty($_SESSION['userid'])===false&&empty($_SESSION['usernickname'])===false&&$myfictionlist["fiction_author"]===$_SESSION['usernickname']&&$dfwriteid==="1"){
+    ?>
+    <div class="fictionintro_container">
+      <div class="fictionintro_grid">
+        <div class="fictionhome_image">
+            <img src="<?php echo $myfictionlist["fiction_imagepath"]; ?>" alt="" draggable="false" style="width: 100%; height: 100%;">
+        </div>
+        <div class="fictionhome_title">
+            <p style="float:left;"><?php echo $myfictionlist["fiction_title"]; ?></p>
+        </div>
+        <div class="fictionhome_author">
+            <p style="float:left;"><?php echo $myfictionlist["fiction_author"]; ?></p>
+        </div>
+        <div class="fictionhome_button">
+          <input type="button" class="btn btn-outline-dark"  name="" value="첫화보기" style="float:right;" onclick="readcount_start();">
+          <?php
+          $q9 = "SELECT * FROM chapterdata WHERE chapter_fictionid='$dffictionid' AND chapter_number=1";
+          $result9 = $mysqli->query( $q9);
+          $chapterprice=$result9->fetch_array();
+
+          if(empty($chapterprice)){
+
+          }else{
+            if($chapterprice["chapter_category"]=="무료"){ ?>
+
+              <script type="text/javascript">
+                 function readcount_start(){
+                         var boardname = "fiction";
+                         var chapterdata_re = 1;
+                         var fictiondata_re ="<?php echo $myfictionlist["idfictiondata"]; ?>";
+                         var udata={"boardname":boardname , "chapterdata_re":chapterdata_re , "fictiondata_re":fictiondata_re };
+                         $.ajax({
+                           url: "boardcount_check.php",
+                           type: "post",
+                           data: udata,
+                         }).done(function(data) {
+
+                          location.href="./fictionhome.html?fictionid=<?php echo $dffictionid; ?>&chapter=1";
+
+                         });
+                     }
+               </script>
+
+            <?php }elseif($chapterprice["chapter_category"]=="유료"){ ?>
+
+              <script type="text/javascript">
+              function readcount_start(){
+                      var boardname = "fiction";
+                      var chapterdata_re =1;
+                      var fictiondata_re ="<?php echo $myfictionlist["idfictiondata"]; ?>";
+                      var dfuserid = "<?php echo $dfuserid; ?>";
+                      var idchapterdata="<?php echo $chapterprice['idchapterdata']; ?>"
+                      var udata={"boardname":boardname , "chapterdata_re":chapterdata_re , "fictiondata_re":fictiondata_re, "dfuserid":dfuserid, "idchapterdata":idchapterdata };
+                      $.ajax({
+                        url: "buylist_check.php",
+                        type: "post",
+                        data: udata,
+                      }).done(function(data) {
+                       if(data=="no"){
+                         alert("먼저 작품을 구매해야 합니다.");
+                       }else{
+                        location.href="./fictionhome.html?fictionid=<?php echo $dffictionid; ?>&chapter=1";
+                       }
+                      });
+                  }
+              </script>
+
+         <?php   }
+          }
+          ?>     <?php if(empty($_SESSION["userid"])){ ?>
+          <button type="button" id="favoritebutton" class="btn btn-outline-dark" style="float:right;margin-right:10px;" name="button" onclick="favorite_not();"><img src="./siteimage/star.png" style="margin-right:10px;" alt=""><?php echo $myfictionlist["fiction_favorite"];?> 명</button>
+             <script type="text/javascript">
+               function favorite_not(){
+                 alert("먼저 로그인을 해주세요");
+               }
+             </script>
+           <?php }else{
+             $q8="SELECT * FROM favoritefictiondata WHERE favoritefiction_userid='$dfuserid' AND favoritefiction_fictionid='$dffictionid'";
+             $fav=$mysqli->query($q8);
+             $favorite=$fav->fetch_array();
+             if(empty($favorite)){ ?>
+               <button type="button" id="favoritebutton" class="btn btn-outline-dark" style="float:right;margin-right:10px;" name="button" onclick="check_favorite();"><img style="margin-right:10px;" id="star" src="./siteimage/star.png" alt=""><span id="starval"><?php echo $myfictionlist["fiction_favorite"];?> 명</span></button>
+            <?php   }else{ ?>
+               <button type="button" id="favoritebutton" class="btn btn-outline-dark" style="float:right;margin-right:10px;" name="button" onclick="check_favorite();"><img style="margin-right:10px;" id="star" src="./siteimage/star2.png" alt=""><span id="starval"><?php echo $myfictionlist["fiction_favorite"];?> 명</span></button>
+
+            <?php  }
+
+             ?>
+             <script type="text/javascript">
+                function check_favorite(){
+                        var uid ="<?php echo $_SESSION['userid']; ?>";
+                        var favoritefictiondata ="<?php echo $myfictionlist["idfictiondata"]; ?>";
+                        var udata={"uid":uid , "favoritefictiondata":favoritefictiondata };
+                        $.ajax({
+                          url: "favoritefiction_check.php",
+                          type: "post",
+                          data: udata,
+                        }).done(function(data) {
+
+                            var datasplit = data.split(',');
+
+                             if(datasplit[0]=="no"){
+                               $('#star').attr("src","./siteimage/star.png");
+                               $('#starval').text(datasplit[1]+" 명");
+                             }else{
+                               $('#star').attr("src","./siteimage/star2.png");
+                                $('#starval').text(datasplit[1]+" 명");
+                             }
+
+
+                        });
+                    }
+              </script>
+           <?php } ?>    </div>
+      </div>
+    </div>
+
+    <div class="writecontainer">
+      <form class="" action="./chapterregister_check.php" method="post">
+         <div class="writegrid">
+          <div class="chaptertitle_text">
+              <p>소제목 (50자 이내)</p>
+              <textarea name="chaptertitletext" id="chaptertitletext" style="width:750px;height:100px;" rows="4" cols="80" placeholder="소제목을 입력해주세요" required></textarea>
+              <script type="text/javascript">
+              $('#chaptertitletext').on('keyup', function() {
+
+                if($(this).val().length >50 ) {
+
+                  alert("글자수는 50자 이내로 제한됩니다.");
+
+                  $(this).val($(this).val().substring(0, 50));
+
+                }
+
+              });
+              </script>
+          </div>
+          <div class="chapterdescription_text">
+              <p>본문</p>
+              <textarea name="chapterdescriptiontext" style="width:750px;min-height:500px;" rows="8" cols="80" placeholder="본문을 입력해주세요" required></textarea>
+
+          </div>
+          <div class="author_comment">
+              <p>작가의말</p>
+              <textarea name="authorcommenttext" style="width:750px;" rows="8" cols="80" placeholder=""></textarea>
+
+          </div>
+          <div class="chapterwrite_bt">
+              <input type="hidden" name="idfictiondata" value="<?php echo $myfictionlist["idfictiondata"]; ?>">
+              <input type="hidden" name="fictionpricecategory" value="<?php echo $myfictionlist["fiction_pricecategory"]; ?>">
+              <input type="hidden" name="fictionstartpricechapter" value="<?php echo $myfictionlist["fiction_startpricechapter"]; ?>">
+              <input type="hidden" name="writeid" value="1">
+              <input type="submit" name="" value="등록">
+          </div>
+         </div>
+       </form>
+    </div>
+
+    <?php
+    }elseif(empty($_SESSION['userid'])===false&&empty($_SESSION['usernickname'])===false&&$myfictionlist["fiction_author"]===$_SESSION['usernickname']&&$dfwriteid==="2"){
+    ?>
+    <div class="fictionintro_container">
+      <div class="fictionintro_grid">
+        <div class="fictionhome_image">
+            <img src="<?php echo $myfictionlist["fiction_imagepath"]; ?>" alt="" draggable="false" style="width: 100%; height: 100%;">
+        </div>
+        <div class="fictionhome_title">
+            <p style="float:left;"><?php echo $myfictionlist["fiction_title"]; ?></p>
+        </div>
+        <div class="fictionhome_author">
+            <p style="float:left;"><?php echo $myfictionlist["fiction_author"]; ?></p>
+        </div>
+        <div class="fictionhome_button">
+          <input type="button" class="btn btn-outline-dark"  name="" value="첫화보기" style="float:right;" onclick="readcount_start();">
+          <?php
+          $q9 = "SELECT * FROM chapterdata WHERE chapter_fictionid='$dffictionid' AND chapter_number=1";
+          $result9 = $mysqli->query( $q9);
+          $chapterprice=$result9->fetch_array();
+
+          if(empty($chapterprice)){
+
+          }else{
+            if($chapterprice["chapter_category"]=="무료"){ ?>
+
+              <script type="text/javascript">
+                 function readcount_start(){
+                         var boardname = "fiction";
+                         var chapterdata_re = 1;
+                         var fictiondata_re ="<?php echo $myfictionlist["idfictiondata"]; ?>";
+                         var udata={"boardname":boardname , "chapterdata_re":chapterdata_re , "fictiondata_re":fictiondata_re };
+                         $.ajax({
+                           url: "boardcount_check.php",
+                           type: "post",
+                           data: udata,
+                         }).done(function(data) {
+
+                          location.href="./fictionhome.html?fictionid=<?php echo $dffictionid; ?>&chapter=1";
+
+                         });
+                     }
+               </script>
+
+            <?php }elseif($chapterprice["chapter_category"]=="유료"){ ?>
+
+              <script type="text/javascript">
+              function readcount_start(){
+                      var boardname = "fiction";
+                      var chapterdata_re =1;
+                      var fictiondata_re ="<?php echo $myfictionlist["idfictiondata"]; ?>";
+                      var dfuserid = "<?php echo $dfuserid; ?>";
+                      var idchapterdata="<?php echo $chapterprice['idchapterdata']; ?>"
+                      var udata={"boardname":boardname , "chapterdata_re":chapterdata_re , "fictiondata_re":fictiondata_re, "dfuserid":dfuserid, "idchapterdata":idchapterdata };
+                      $.ajax({
+                        url: "buylist_check.php",
+                        type: "post",
+                        data: udata,
+                      }).done(function(data) {
+                       if(data=="no"){
+                         alert("먼저 작품을 구매해야 합니다.");
+                       }else{
+                        location.href="./fictionhome.html?fictionid=<?php echo $dffictionid; ?>&chapter=1";
+                       }
+                      });
+                  }
+              </script>
+
+         <?php   }
+          }
+          ?>     <?php if(empty($_SESSION["userid"])){ ?>
+          <button type="button" id="favoritebutton" class="btn btn-outline-dark" style="float:right;margin-right:10px;" name="button" onclick="favorite_not();"><img src="./siteimage/star.png" style="margin-right:10px;" alt=""><?php echo $myfictionlist["fiction_favorite"];?> 명</button>
+             <script type="text/javascript">
+               function favorite_not(){
+                 alert("먼저 로그인을 해주세요");
+               }
+             </script>
+           <?php }else{
+             $q8="SELECT * FROM favoritefictiondata WHERE favoritefiction_userid='$dfuserid' AND favoritefiction_fictionid='$dffictionid'";
+             $fav=$mysqli->query($q8);
+             $favorite=$fav->fetch_array();
+             if(empty($favorite)){ ?>
+               <button type="button" id="favoritebutton" class="btn btn-outline-dark" style="float:right;margin-right:10px;" name="button" onclick="check_favorite();"><img style="margin-right:10px;" id="star" src="./siteimage/star.png" alt=""><span id="starval"><?php echo $myfictionlist["fiction_favorite"];?> 명</span></button>
+            <?php   }else{ ?>
+               <button type="button" id="favoritebutton" class="btn btn-outline-dark" style="float:right;margin-right:10px;" name="button" onclick="check_favorite();"><img style="margin-right:10px;" id="star" src="./siteimage/star2.png" alt=""><span id="starval"><?php echo $myfictionlist["fiction_favorite"];?> 명</span></button>
+
+            <?php  }
+
+             ?>
+             <script type="text/javascript">
+                function check_favorite(){
+                        var uid ="<?php echo $_SESSION['userid']; ?>";
+                        var favoritefictiondata ="<?php echo $myfictionlist["idfictiondata"]; ?>";
+                        var udata={"uid":uid , "favoritefictiondata":favoritefictiondata };
+                        $.ajax({
+                          url: "favoritefiction_check.php",
+                          type: "post",
+                          data: udata,
+                        }).done(function(data) {
+
+                            var datasplit = data.split(',');
+
+                             if(datasplit[0]=="no"){
+                               $('#star').attr("src","./siteimage/star.png");
+                               $('#starval').text(datasplit[1]+" 명");
+                             }else{
+                               $('#star').attr("src","./siteimage/star2.png");
+                                $('#starval').text(datasplit[1]+" 명");
+                             }
+
+
+                        });
+                    }
+              </script>
+           <?php } ?>    </div>
+      </div>
+    </div>
+
+    <div class="writecontainer">
+      <form class="" action="./chapterregister_check.php" method="post">
+         <div class="writegrid">
+          <div class="chaptertitle_text">
+              <p>소제목 (50자 이내)</p>
+              <textarea name="chaptertitletext" id="chaptertitletext" style="width:750px;height:100px;" rows="4" cols="80" placeholder="소제목을 입력해주세요" required></textarea>
+              <script type="text/javascript">
+              $('#chaptertitletext').on('keyup', function() {
+
+                if($(this).val().length >50 ) {
+
+                  alert("글자수는 50자 이내로 제한됩니다.");
+
+                  $(this).val($(this).val().substring(0, 50));
+
+                }
+
+              });
+              </script>
+          </div>
+          <div class="chapterdescription_text">
+              <p>본문</p>
+              <textarea name="chapterdescriptiontext" style="width:750px;min-height:500px;" rows="8" cols="80" placeholder="본문을 입력해주세요" required></textarea>
+
+          </div>
+          <div class="chapterwrite_bt">
+              <input type="hidden" name="idfictiondata" value="<?php echo $myfictionlist["idfictiondata"]; ?>">
+              <input type="hidden" name="fictionpricecategory" value="<?php echo $myfictionlist["fiction_pricecategory"]; ?>">
+              <input type="hidden" name="fictionstartpricechapter" value="<?php echo $myfictionlist["fiction_startpricechapter"]; ?>">
+
+              <input type="hidden" name="writeid" value="2">
+              <input type="submit" name="" value="등록">
+          </div>
+         </div>
+       </form>
+    </div>
+    <!--일반글 수정-->
+    <?php
+    }elseif(empty($_SESSION['userid'])===false&&empty($_SESSION['usernickname'])===false&&$myfictionlist["fiction_author"]===$_SESSION['usernickname']&&$dfwriteid==="3"){
+    ?>
+    <div class="fictionintro_container">
+      <div class="fictionintro_grid">
+        <div class="fictionhome_image">
+            <img src="<?php echo $myfictionlist["fiction_imagepath"]; ?>" alt="" draggable="false" style="width: 100%; height: 100%;">
+        </div>
+        <div class="fictionhome_title">
+            <p style="float:left;"><?php echo $myfictionlist["fiction_title"]; ?></p>
+        </div>
+        <div class="fictionhome_author">
+            <p style="float:left;"><?php echo $myfictionlist["fiction_author"]; ?></p>
+        </div>
+        <div class="fictionhome_button">
+          <input type="button" class="btn btn-outline-dark"  name="" value="첫화보기" style="float:right;" onclick="readcount_start();">
+          <?php
+          $q9 = "SELECT * FROM chapterdata WHERE chapter_fictionid='$dffictionid' AND chapter_number=1";
+          $result9 = $mysqli->query( $q9);
+          $chapterprice=$result9->fetch_array();
+
+          if(empty($chapterprice)){
+
+          }else{
+            if($chapterprice["chapter_category"]=="무료"){ ?>
+
+              <script type="text/javascript">
+                 function readcount_start(){
+                         var boardname = "fiction";
+                         var chapterdata_re = 1;
+                         var fictiondata_re ="<?php echo $myfictionlist["idfictiondata"]; ?>";
+                         var udata={"boardname":boardname , "chapterdata_re":chapterdata_re , "fictiondata_re":fictiondata_re };
+                         $.ajax({
+                           url: "boardcount_check.php",
+                           type: "post",
+                           data: udata,
+                         }).done(function(data) {
+
+                          location.href="./fictionhome.html?fictionid=<?php echo $dffictionid; ?>&chapter=1";
+
+                         });
+                     }
+               </script>
+
+            <?php }elseif($chapterprice["chapter_category"]=="유료"){ ?>
+
+              <script type="text/javascript">
+              function readcount_start(){
+                      var boardname = "fiction";
+                      var chapterdata_re =1;
+                      var fictiondata_re ="<?php echo $myfictionlist["idfictiondata"]; ?>";
+                      var dfuserid = "<?php echo $dfuserid; ?>";
+                      var idchapterdata="<?php echo $chapterprice['idchapterdata']; ?>"
+                      var udata={"boardname":boardname , "chapterdata_re":chapterdata_re , "fictiondata_re":fictiondata_re, "dfuserid":dfuserid, "idchapterdata":idchapterdata };
+                      $.ajax({
+                        url: "buylist_check.php",
+                        type: "post",
+                        data: udata,
+                      }).done(function(data) {
+                       if(data=="no"){
+                         alert("먼저 작품을 구매해야 합니다.");
+                       }else{
+                        location.href="./fictionhome.html?fictionid=<?php echo $dffictionid; ?>&chapter=1";
+                       }
+                      });
+                  }
+              </script>
+
+         <?php   }
+          }
+          ?>     <?php if(empty($_SESSION["userid"])){ ?>
+          <button type="button" id="favoritebutton" class="btn btn-outline-dark" style="float:right;margin-right:10px;" name="button" onclick="favorite_not();"><img src="./siteimage/star.png" style="margin-right:10px;" alt=""><?php echo $myfictionlist["fiction_favorite"];?> 명</button>
+             <script type="text/javascript">
+               function favorite_not(){
+                 alert("먼저 로그인을 해주세요");
+               }
+             </script>
+           <?php }else{
+             $q8="SELECT * FROM favoritefictiondata WHERE favoritefiction_userid='$dfuserid' AND favoritefiction_fictionid='$dffictionid'";
+             $fav=$mysqli->query($q8);
+             $favorite=$fav->fetch_array();
+             if(empty($favorite)){ ?>
+               <button type="button" id="favoritebutton" class="btn btn-outline-dark" style="float:right;margin-right:10px;" name="button" onclick="check_favorite();"><img style="margin-right:10px;" id="star" src="./siteimage/star.png" alt=""><span id="starval"><?php echo $myfictionlist["fiction_favorite"];?> 명</span></button>
+            <?php   }else{ ?>
+               <button type="button" id="favoritebutton" class="btn btn-outline-dark" style="float:right;margin-right:10px;" name="button" onclick="check_favorite();"><img style="margin-right:10px;" id="star" src="./siteimage/star2.png" alt=""><span id="starval"><?php echo $myfictionlist["fiction_favorite"];?> 명</span></button>
+
+            <?php  }
+
+             ?>
+             <script type="text/javascript">
+                function check_favorite(){
+                        var uid ="<?php echo $_SESSION['userid']; ?>";
+                        var favoritefictiondata ="<?php echo $myfictionlist["idfictiondata"]; ?>";
+                        var udata={"uid":uid , "favoritefictiondata":favoritefictiondata };
+                        $.ajax({
+                          url: "favoritefiction_check.php",
+                          type: "post",
+                          data: udata,
+                        }).done(function(data) {
+
+                            var datasplit = data.split(',');
+
+                             if(datasplit[0]=="no"){
+                               $('#star').attr("src","./siteimage/star.png");
+                               $('#starval').text(datasplit[1]+" 명");
+                             }else{
+                               $('#star').attr("src","./siteimage/star2.png");
+                                $('#starval').text(datasplit[1]+" 명");
+                             }
+
+
+                        });
+                    }
+              </script>
+           <?php } ?>    </div>
+      </div>
+    </div>
+
+    <div class="writecontainer">
+      <?php
+       $fictionidmo =$_POST['fictionid_mo'];
+       $chapternumbermo=$_POST['chapternumber_mo'];
+       $q11="SELECT * FROM chapterdata WHERE chapter_fictionid='$fictionidmo' AND chapter_number='$chapternumbermo'";
+        $chaptermo_sub=$mysqli->query($q11);
+        $chaptermo=$chaptermo_sub->fetch_array();
+      ?>
+      <form class="" action="./chaptermodify_ok.php" method="post">
+         <div class="writegrid">
+          <div class="chaptertitle_text">
+              <p>소제목 (50자 이내)</p>
+              <textarea name="chaptertitletext" id="chaptertitletext" style="width:750px;height:100px;" rows="4" cols="80" placeholder="소제목을 입력해주세요" required><?php echo $_POST['chaptertitle_mo']; ?></textarea>
+              <script type="text/javascript">
+              $('#chaptertitletext').on('keyup', function() {
+
+                if($(this).val().length >50 ) {
+
+                  alert("글자수는 50자 이내로 제한됩니다.");
+
+                  $(this).val($(this).val().substring(0, 50));
+
+                }
+
+              });
+              </script>
+          </div>
+          <div class="chapterdescription_text">
+              <p>본문</p>
+              <textarea name="chapterdescriptiontext" style="width:750px;min-height:500px;" rows="8" cols="80" placeholder="본문을 입력해주세요" required><?php echo $chaptermo['chapter_description']; ?></textarea>
+
+          </div>
+          <div class="author_comment">
+              <p>작가의말</p>
+              <textarea name="authorcommenttext" style="width:750px;" rows="8" cols="80" placeholder=""><?php echo $_POST['chapterauthorcomment_mo']; ?></textarea>
+
+          </div>
+          <div class="chapterwrite_bt">
+              <input type="hidden" name="idfictiondata" value="<?php echo $_POST['fictionid_mo']; ?>">
+              <input type="hidden" name="chapternumber" value="<?php echo $_POST["chapternumber_mo"]; ?>">
+
+              <input type="hidden" name="idchapterdata" value="<?php echo $_POST["idchapterdata_mo"]; ?>">
+
+              <input type="submit" name="" value="수정">
+          </div>
+         </div>
+       </form>
+    </div>
+    <?php
+    }elseif(empty($_SESSION['userid'])===false&&empty($_SESSION['usernickname'])===false&&$myfictionlist["fiction_author"]===$_SESSION['usernickname']&&$dfwriteid==="4"){
+    ?>
+    <div class="fictionintro_container">
+      <div class="fictionintro_grid">
+        <div class="fictionhome_image">
+            <img src="<?php echo $myfictionlist["fiction_imagepath"]; ?>" alt="" draggable="false" style="width: 100%; height: 100%;">
+        </div>
+        <div class="fictionhome_title">
+            <p style="float:left;"><?php echo $myfictionlist["fiction_title"]; ?></p>
+        </div>
+        <div class="fictionhome_author">
+            <p style="float:left;"><?php echo $myfictionlist["fiction_author"]; ?></p>
+        </div>
+        <div class="fictionhome_button">
+          <input type="button" class="btn btn-outline-dark"  name="" value="첫화보기" style="float:right;" onclick="readcount_start();">
+          <?php
+          $q9 = "SELECT * FROM chapterdata WHERE chapter_fictionid='$dffictionid' AND chapter_number=1";
+          $result9 = $mysqli->query( $q9);
+          $chapterprice=$result9->fetch_array();
+
+          if(empty($chapterprice)){
+
+          }else{
+            if($chapterprice["chapter_category"]=="무료"){ ?>
+
+              <script type="text/javascript">
+                 function readcount_start(){
+                         var boardname = "fiction";
+                         var chapterdata_re = 1;
+                         var fictiondata_re ="<?php echo $myfictionlist["idfictiondata"]; ?>";
+                         var udata={"boardname":boardname , "chapterdata_re":chapterdata_re , "fictiondata_re":fictiondata_re };
+                         $.ajax({
+                           url: "boardcount_check.php",
+                           type: "post",
+                           data: udata,
+                         }).done(function(data) {
+
+                          location.href="./fictionhome.html?fictionid=<?php echo $dffictionid; ?>&chapter=1";
+
+                         });
+                     }
+               </script>
+
+            <?php }elseif($chapterprice["chapter_category"]=="유료"){ ?>
+
+              <script type="text/javascript">
+              function readcount_start(){
+                      var boardname = "fiction";
+                      var chapterdata_re =1;
+                      var fictiondata_re ="<?php echo $myfictionlist["idfictiondata"]; ?>";
+                      var dfuserid = "<?php echo $dfuserid; ?>";
+                      var idchapterdata="<?php echo $chapterprice['idchapterdata']; ?>"
+                      var udata={"boardname":boardname , "chapterdata_re":chapterdata_re , "fictiondata_re":fictiondata_re, "dfuserid":dfuserid, "idchapterdata":idchapterdata };
+                      $.ajax({
+                        url: "buylist_check.php",
+                        type: "post",
+                        data: udata,
+                      }).done(function(data) {
+                       if(data=="no"){
+                         alert("먼저 작품을 구매해야 합니다.");
+                       }else{
+                        location.href="./fictionhome.html?fictionid=<?php echo $dffictionid; ?>&chapter=1";
+                       }
+                      });
+                  }
+              </script>
+
+         <?php   }
+          }
+          ?>     <?php if(empty($_SESSION["userid"])){ ?>
+          <button type="button" id="favoritebutton" class="btn btn-outline-dark" style="float:right;margin-right:10px;" name="button" onclick="favorite_not();"><img src="./siteimage/star.png" style="margin-right:10px;" alt=""><?php echo $myfictionlist["fiction_favorite"];?> 명</button>
+             <script type="text/javascript">
+               function favorite_not(){
+                 alert("먼저 로그인을 해주세요");
+               }
+             </script>
+           <?php }else{
+             $q8="SELECT * FROM favoritefictiondata WHERE favoritefiction_userid='$dfuserid' AND favoritefiction_fictionid='$dffictionid'";
+             $fav=$mysqli->query($q8);
+             $favorite=$fav->fetch_array();
+             if(empty($favorite)){ ?>
+               <button type="button" id="favoritebutton" class="btn btn-outline-dark" style="float:right;margin-right:10px;" name="button" onclick="check_favorite();"><img style="margin-right:10px;" id="star" src="./siteimage/star.png" alt=""><span id="starval"><?php echo $myfictionlist["fiction_favorite"];?> 명</span></button>
+            <?php   }else{ ?>
+               <button type="button" id="favoritebutton" class="btn btn-outline-dark" style="float:right;margin-right:10px;" name="button" onclick="check_favorite();"><img style="margin-right:10px;" id="star" src="./siteimage/star2.png" alt=""><span id="starval"><?php echo $myfictionlist["fiction_favorite"];?> 명</span></button>
+
+            <?php  }
+
+             ?>
+             <script type="text/javascript">
+                function check_favorite(){
+                        var uid ="<?php echo $_SESSION['userid']; ?>";
+                        var favoritefictiondata ="<?php echo $myfictionlist["idfictiondata"]; ?>";
+                        var udata={"uid":uid , "favoritefictiondata":favoritefictiondata };
+                        $.ajax({
+                          url: "favoritefiction_check.php",
+                          type: "post",
+                          data: udata,
+                        }).done(function(data) {
+
+                            var datasplit = data.split(',');
+
+                             if(datasplit[0]=="no"){
+                               $('#star').attr("src","./siteimage/star.png");
+                               $('#starval').text(datasplit[1]+" 명");
+                             }else{
+                               $('#star').attr("src","./siteimage/star2.png");
+                                $('#starval').text(datasplit[1]+" 명");
+                             }
+
+
+                        });
+                    }
+              </script>
+           <?php } ?>    </div>
+      </div>
+    </div>
+
+    <div class="writecontainer">
+      <form class="" action="./chapternoticemodify_ok.php" method="post">
+         <div class="writegrid">
+          <div class="chaptertitle_text">
+              <p>소제목 (50자 이내)</p>
+              <textarea name="chaptertitletext"  id="chaptertitletext" style="width:750px;height:100px;" rows="4" cols="80" placeholder="소제목을 입력해주세요" required><?php echo $_POST['chaptertitle_mo']; ?></textarea>
+              <script type="text/javascript">
+              $('#chaptertitletext').on('keyup', function() {
+
+                if($(this).val().length >50 ) {
+
+                  alert("글자수는 50자 이내로 제한됩니다.");
+
+                  $(this).val($(this).val().substring(0, 50));
+
+                }
+
+              });
+              </script>
+          </div>
+          <div class="chapterdescription_text">
+              <p>본문</p>
+              <textarea name="chapterdescriptiontext"  style="word-break:break-all;width:750px;min-height:500px;" rows="8" cols="80" placeholder="본문을 입력해주세요" required><?php echo $_POST['chapterdescription_mo']; ?></textarea>
+
+          </div>
+          <div class="chapterwrite_bt">
+            <input type="hidden" name="idfictiondata" value="<?php echo $_POST['fictionid_mo']; ?>">
+            <input type="hidden" name="chapternumber" value="<?php echo $_POST["chapternumber_mo"]; ?>">
+
+            <input type="hidden" name="idchapterdata" value="<?php echo $_POST["idchapterdata_mo"]; ?>">
+            <input type="submit" name="" value="수정">
+          </div>
+         </div>
+       </form>
+    </div>
+    <!-- 글 읽기 -->
+    <?php
+    }elseif(empty($dffictionid)==false&&empty($dfchapter)==false&&empty($dfnotice)){
+      include_once ('./fictionread.php');
+    ?>
+
+    <?php
+    }elseif(empty($dffictionid)==false&&empty($dfchapter)&&empty($dfnotice)==false){
+      include_once ('./noticeread.php');
+    ?>
+
+    <?php
+    }else{
+      echo '<script>alert("잘못된 접근입니다.");document.location.href="./main.html";</script>';
+    }
+    ?>
+
+    </section>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>

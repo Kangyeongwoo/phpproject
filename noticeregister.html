@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>게시글등록</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+  </head>
+  <body>
+
+
+    <div id="board_write">
+          <h1><a href="/">자유게시판</a></h1>
+          <h4>글을 작성하는 공간입니다.</h4>
+              <div id="write_area">
+                  <form action="noticeregister_ok.php" method="post">
+                    <div id="in_category">
+                      <select name="category">
+                          <option value="">분류선택</option>
+                          <option value="웹소설">웹소설</option>
+                          <option value="도서">도서</option>
+
+                      </select>
+                    </div>
+
+                      <div id="in_title">
+                          <textarea name="title" id="utitle" rows="1" cols="55" placeholder="제목" maxlength="100" required></textarea>
+                      </div>
+                      <div class="wi_line"></div>
+                      <div id="in_name">
+                          <textarea name="author" id="uauthor" rows="1" cols="55" placeholder="글쓴이" maxlength="100" required></textarea>
+                      </div>
+                      <div class="wi_line"></div>
+                      <div id="in_discription">
+                          <textarea name="discription" id="udiscription" placeholder="내용" required></textarea>
+                      </div>
+
+                      <div class="bt_se">
+                          <button type="submit">글 작성</button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>

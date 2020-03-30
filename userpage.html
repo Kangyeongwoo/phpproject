@@ -1,0 +1,466 @@
+<?php
+include_once ('./dbconfig.php');
+$mysqli = new mysqli($DB['host'], $DB['id'], $DB['pw'], $DB['db']);
+session_start();
+$_SESSION['userid'];
+$_SESSION['usernickname'];
+$defaultusercategory=$_GET["usercategoryid"];
+if(empty($_SESSION['userid'])&&empty($_SESSION['usernickname'])){
+  echo '<script>alert("먼저 로그인을 해야합니다");document.location.href="./main.html";</script>';
+}
+?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+    <title>웹 페이지 레이아웃</title>
+    <style>
+        *{
+          font-family: Sans-Serif;
+        }
+        header{
+            /*  border : 2px solid red; */
+            line-height: 55px;
+            height : 55px;
+            font-size : 30px;
+            font-style : Italic;
+            text-align: center;
+        }
+        nav{
+          /*  border : 2px solid blue; */
+            height : 50px;
+            font-size : 30px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        section{
+min-height: 550px;
+            width: auto;
+            height : auto;
+            background-color:#D8D8D8;
+            text-align:center;
+
+
+        }
+
+       .navul{
+              text-align:center;
+            display:inline-block;
+        }
+        .navli{
+            display:inline-block;
+            font-size: 15px;
+            width: 150px;
+        }
+
+        .headfunc{
+          display:block;
+
+        }
+           #usercategorycontainer{
+             margin-top: 10px;
+           }
+           #usercategorycontainer ul{
+             list-style: none;
+             margin: 0px;
+             padding: 0px;
+           }
+           #usercategorycontainer ul li{
+             background-color: white;
+             width:150px;
+             height: 25px;
+             line-height: 25px;
+             text-align: center;
+             border: 1px solid gray;
+             color: black;
+             font-size: 15px;
+             margin: 0px;
+             padding: 0px;
+           }
+           #usercategorycontainer ul li:hover{
+             background-color: #85C1E9;
+             margin: 0px;
+             padding: 0px;
+           }
+           #usercategorycontainer ul ul{
+             display: none;
+             margin: 0px;
+             padding: 0px;
+           }
+           #usercategorycontainer ul li:hover > ul{
+             display: block;
+             margin: 0px;
+             padding: 0px;
+           }
+           .usercategorybar_container{
+             width: 800px;
+             display: inline-block;
+             background-color: white;
+             margin-top: 5px;
+
+           }
+           .usercategorybar{
+             width: 800px;
+             height: auto;
+             background-color: white;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+            grid-template-rows: 40px;
+
+           }
+
+           .userprofill_container{
+             display:inline-block;
+             width: 800px;
+             margin-top:5px;
+              background-color: white;
+              margin-bottom:10px;
+           }
+           .userprofill{
+             padding-top:20px;
+             width: 800px;
+             height: auto;
+
+             display:grid;
+
+             grid-template-columns: 1fr 2fr;
+             grid-template-rows: 60px 60px 60px 60px 60px 60px;
+           }
+           .userprofill_cache{
+             border-right:2px solid black;
+             border-top:1px solid gray;
+             padding-right:5px;
+             padding-top: 5px;
+             grid-row: 1/2;
+             grid-column: 1/2;
+
+           }
+           .userprofill_cachetext{
+             border-top:1px solid gray;
+              padding-top: 5px;
+             padding-left:5px;
+             grid-row: 1/2;
+             grid-column: 2/3;
+
+           }
+           .userprofill_id{
+              padding-top: 5px;
+             border-right:2px solid black;
+             border-top:1px solid gray;
+             padding-right:5px;
+             grid-row: 2/3;
+             grid-column: 1/2;
+
+           }
+           .userprofill_idtext{
+              padding-top: 5px;
+             border-top:1px solid gray;
+             padding-left:5px;
+             grid-row: 2/3;
+             grid-column: 2/3;
+
+           }
+           .userprofill_pw{
+              padding-top: 5px;
+             border-right:2px solid black;
+             border-top:1px solid gray;
+             padding-right:5px;
+             grid-row: 3/4;
+             grid-column: 1/2;
+           }
+           .userprofill_pwtext{
+              padding-top: 5px;
+             border-top:1px solid gray;
+             padding-left:5px;
+             grid-row: 3/4;
+             grid-column: 2/3;
+           }
+           .userprofill_nickname{
+              padding-top: 5px;
+             border-right:2px solid black;
+             border-top:1px solid gray;
+             padding-right:5px;
+             grid-row: 4/5;
+             grid-column: 1/2;
+           }
+           .userprofill_nicknametext{
+              padding-top: 5px;
+             border-top:1px solid gray;
+             padding-left:5px;
+             grid-row: 4/5;
+             grid-column: 2/3;
+           }
+
+           .userprofill_button{
+              padding-top: 5px;
+             border-top:1px solid gray;
+
+             grid-row: 5/6;
+             grid-column: 1/3;
+           }
+           .btcustom1{
+             color:gray;
+           }
+           .btcustom2{
+             font-weight:bold;
+           }
+
+    </style>
+</head>
+<body>
+  <script src="//code.jquery.com/jquery.min.js"></script>
+
+    <?php
+     $dfuserid=$_SESSION['userid'];
+     if(empty($_SESSION['userid'])){
+
+     }else{
+       $q10="SELECT * FROM userprofill WHERE id='$dfuserid'";
+       $result10=$mysqli->query($q10);
+       $usercoin=$result10->fetch_array();
+     }
+
+    ?>
+
+  <header>
+    <span class="headfunc" >
+
+        <i style="padding-left:29%;">BookChain</i>
+
+        <?php
+
+        if(!isset($_SESSION['userid']) || !isset($_SESSION['usernickname'])){
+          ?>
+        <div class="homelogin-charge" style="float:right;margin-right:5px;">
+          <input type="button" class="btn btn-primary" value="로그인" onClick="location.href='login.html'">
+        </div>
+        <?php
+      }else{
+        $dfusernickname=$_SESSION['usernickname'];
+        ?>
+       <div id="usercategorycontainer" style="z-index:2;float:right;margin-right:5px;">
+
+      <ul >
+        <li ><?php echo $dfusernickname; ?><img style="float:right;padding-right:2px;padding-top:3px;" src="./siteimage/down.png" alt="">
+          <ul>
+          <li><a href="userpage.html?usercategoryid=1">내정보</a></li>
+          <li><a href="userpage.html?usercategoryid=2">선호작</a></li>
+          <li><a href="userpage.html?usercategoryid=3">충전하기</a></li>
+          <li><a href="userpage.html?usercategoryid=4&myfictioncategoryid=1">내작품</a></li>
+          <li><a href="userpage.html?usercategoryid=5">내게시글</a></li>
+          <li><a href="userpage.html?usercategoryid=6&mybuylistcategoryid=1">구매목록</a></li>
+          <li><a href="logout.html">로그아웃</a></li>
+        </ul>
+      </li>
+      </ul>
+       </div>
+
+       <div class="" style="font-size:12px;float:right;margin-right:10px;font-weight:bold;cursor:pointer;" onclick="coincharge();">
+          내 캐시: <?php echo $usercoin['coin']; ?> 원
+       </div>
+       <script type="text/javascript">
+         function coincharge(){
+              location.href="userpage.html?usercategoryid=3"
+         }
+       </script>
+
+      <?php
+      }
+      ?>
+
+        <div class="" style="float:right;">
+          <form class="" id="searchfrm" name="searchfrm" action="searchpage.php" method="GET">
+            <input type="text" style="border:1px solid black;width:150px;height:30px;font-size:20px;" placeholder="작품검색" name="searchtext" value=""><img src="./siteimage/search.png" onclick="search()" style="margin-top:7px;margin-right:30px; height:30px;width:auto;cursor:pointer;border:1px solid black;" alt="">
+          </form>
+        </div>
+        <script type="text/javascript">
+          function search(){
+              $('#searchfrm').submit();
+          }
+        </script>
+
+    </span>
+
+  </header>
+    <nav>
+          <ul class="navul">
+            <li class="navli"><form class="" action="./main.html" method="get">
+              <?php
+              if(empty($dfcategoryid)===true){
+              ?>
+              <input type="submit" class="btn btn-default btcustom1" name="" value="홈" style="width:100px;">
+              <?php
+               }else{
+              ?>
+              <input type="submit" class="btn btn-default btcustom2" name="" value="홈" style="width:100px;">
+              <?php
+              }
+              ?>
+
+              </form></li>
+            <li class="navli"><form class="" action="./main.html" method="get">
+              <?php
+              if($dfcategoryid==="1"){
+              ?>
+              <input type="hidden" name="categoryid" value="1">
+              <input type="submit" class="btn btn-default btcustom2" name="" value="무료웹소설" style="width:100px;">
+              <?php
+               }else{
+              ?>
+              <input type="hidden" name="categoryid" value="1">
+              <input type="submit" class="btn btn-default btcustom1" name="" value="무료웹소설" style="width:100px;">
+              <?php
+              }
+              ?></form>
+              </li>
+
+            <li class="navli"><form class="" action="./main.html" method="get">
+              <?php
+              if($dfcategoryid==="2"){
+              ?>
+              <input type="hidden" name="categoryid" value="2">
+              <input type="submit" class="btn btn-default btcustom2" name="" value="유료웹소설" style="width:100px;">
+              <?php
+               }else{
+
+              ?>
+              <input type="hidden" name="categoryid" value="2">
+              <input type="submit" class="btn btn-default btcustom1" name="" value="유료웹소설" style="width:100px;">
+              <?php
+              }
+              ?></form>
+              </li>
+
+              <li class="navli"><form class="" action="./main.html" method="get">
+                <?php
+                if($dfcategoryid==="3"){
+
+                ?>
+                <input type="hidden" name="categoryid" value="3">
+                <input type="submit" class="btn btn-default btcustom2" name="" value="추천게시판" style="width:100px;">
+                <?php
+                 }else{
+
+                ?>
+                <input type="hidden" name="categoryid" value="3">
+                <input type="submit" class="btn btn-default btcustom1" name="" value="추천게시판" style="width:100px;">
+                <?php
+                }
+                ?>
+                </form>
+              </li>
+        </ul>
+    </nav>
+
+    <section>
+      <div class="usercategorybar_container">
+        <div class="usercategorybar" >
+            <?php if($defaultusercategory==="1"){ ?>
+
+            <form class="usercategory_userprofill" action="userpage.html" method="get">
+               <input type="hidden" name="usercategoryid" value="1">
+               <input type="submit" name="" class="btn btn-default btcustom2" value="내정보" style="width:130px;">
+            </form>
+            <?php }else{ ?>
+              <form class="usercategory_userprofill" action="userpage.html" method="get">
+                 <input type="hidden" name="usercategoryid" value="1">
+                 <input type="submit" name="" class="btn btn-default btcustom1" value="내정보" style="width:130px;">
+              </form>
+            <?php } ?>
+            <?php if($defaultusercategory==="2"){ ?>
+            <form class="usercategory_favoritefiction" action="userpage.html" method="get">
+               <input type="hidden" name="usercategoryid" value="2">
+               <input type="submit" name="" class="btn btn-default btcustom2" value="선호작" style="width:130px;">
+            </form>
+          <?php }else{ ?>
+            <form class="usercategory_favoritefiction" action="userpage.html" method="get">
+               <input type="hidden" name="usercategoryid" value="2">
+               <input type="submit" name="" class="btn btn-default btcustom1" value="선호작" style="width:130px;">
+            </form>
+          <?php } ?>
+          <?php if($defaultusercategory==="3"){ ?>
+            <form class="usercategory_charge" action="userpage.html" method="get">
+               <input type="hidden" name="usercategoryid" value="3">
+               <input type="submit" name="" class="btn btn-default btcustom2" value="충전하기" style="width:130px;">
+            </form>
+          <?php }else{ ?>
+            <form class="usercategory_charge" action="userpage.html" method="get">
+               <input type="hidden" name="usercategoryid" value="3">
+               <input type="submit" name="" class="btn btn-default btcustom1" value="충전하기" style="width:130px;">
+            </form>
+          <?php } ?>
+          <?php if($defaultusercategory==="4"){ ?>
+            <form class="usercategory_myfiction" action="userpage.html" method="get">
+               <input type="hidden" name="usercategoryid" value="4">
+               <input type="hidden" name="myfictioncategoryid" value="1">
+               <input type="submit" name="" class="btn btn-default btcustom2" value="내작품" style="width:130px;">
+            </form>
+          <?php }else{ ?>
+            <form class="usercategory_myfiction" action="userpage.html" method="get">
+               <input type="hidden" name="usercategoryid" value="4">
+               <input type="hidden" name="myfictioncategoryid" value="1">
+               <input type="submit" name="" class="btn btn-default btcustom1" value="내작품" style="width:130px;">
+            </form>
+          <?php } ?>
+          <?php if($defaultusercategory==="5"){ ?>
+            <form class="usercategory_mynotice" action="userpage.html" method="get">
+               <input type="hidden" name="usercategoryid" value="5">
+               <input type="submit" name="" class="btn btn-default btcustom2" value="내게시글" style="width:130px;">
+            </form>
+          <?php }else{ ?>
+            <form class="usercategory_mynotice" action="userpage.html" method="get">
+               <input type="hidden" name="usercategoryid" value="5">
+               <input type="submit" name="" class="btn btn-default btcustom1" value="내게시글" style="width:130px;">
+            </form>
+          <?php } ?>
+          <?php if($defaultusercategory==="6"){ ?>
+            <form class="usercategory_buylist" action="userpage.html" method="get">
+               <input type="hidden" name="usercategoryid" value="6">
+               <input type="hidden" name="mybuylistcategoryid" value="1">
+
+               <input type="submit" name="" class="btn btn-default btcustom2" value="구매목록" style="width:130px;">
+            </form>
+          <?php }else{ ?>
+            <form class="usercategory_buylist" action="userpage.html" method="get">
+               <input type="hidden" name="usercategoryid" value="6">
+                <input type="hidden" name="mybuylistcategoryid" value="1">
+               <input type="submit" name="" class="btn btn-default btcustom1" value="구매목록" style="width:130px;">
+            </form>
+          <?php } ?>
+
+
+        </div>
+        <!-- userprofill -->
+        </div>
+        <?php
+
+
+        if($defaultusercategory=="1"){
+
+         include_once ('./userprofill.php');
+        }else if($defaultusercategory==="2"){
+        include_once ('./userfavoritefiction.php');
+        }else if($defaultusercategory==="3"){
+          include_once ('./usercharge.php');
+        }else if($defaultusercategory=="4"){
+         include_once ('./usermyfiction.php');
+        }else if($defaultusercategory==="5"){
+         include_once ('./usermynotice.php');
+        }else if($defaultusercategory==="6"){
+         include_once ('./userbuylist.php');
+        }else{
+          echo '<script>alert("잘못된 접근입니다.");document.location.href="./main.html";</script>';
+        }
+
+        ?>
+
+
+
+    </section>
+
+</body>
+</html>
